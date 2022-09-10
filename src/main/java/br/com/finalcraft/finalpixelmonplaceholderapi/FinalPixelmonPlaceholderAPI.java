@@ -6,7 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @ECPlugin(
-        bstatsID = "15984"
+        bstatsID = "15984",
+        spigotID = "105174"
 )
 public class FinalPixelmonPlaceholderAPI extends JavaPlugin{
 
