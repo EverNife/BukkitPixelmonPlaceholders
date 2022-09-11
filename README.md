@@ -5,7 +5,7 @@
   <img src="icon/icon.png" />
 </p>
 
-# FinalPixelmonPlaceholderAPI
+# BukkitPixelmonPlaceholders
 
 This plugin integrates the mod Pixelmon (reforged) with the plugin PlaceholderAPI, so you will be able to use Pixelmon Placeholders on most plugins!
 

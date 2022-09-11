@@ -1,5 +1,6 @@
-name: FinalPixelmonPlaceholderAPI
+name: BukkitPixelmonPlaceholders
 version: 1.0.2
 author: EverNife
-main: br.com.finalcraft.finalpixelmonplaceholderapi.FinalPixelmonPlaceholderAPI
+main: br.com.finalcraft.bukkitpixelmonplaceholders.BukkitPixelmonPlaceholders
 depend: [ EverNifeCore ]
+softdepend: [ PlaceholderAPI ]
