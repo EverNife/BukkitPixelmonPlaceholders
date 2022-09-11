@@ -5,8 +5,10 @@ import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Pokedex;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
+import com.pixelmonmod.pixelmon.spawning.PixelmonSpawning;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 //This class has an influence from https://github.com/EnvyWare/ForgePlaceholderAPI-Extensions
 public class ReforgedPlayerParser_1_16_5 {
@@ -16,11 +18,20 @@ public class ReforgedPlayerParser_1_16_5 {
         final DecimalFormat PERCENTAGE = new DecimalFormat("#0.##");
 
         MAIN_REPLACER.addMappedParser(
-                "dex_count",
-                "Dex Count",
+                "dex_count_caught",
+                "Dex Count Caught",
                 player -> {
                     PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
                     return party.playerPokedex.countCaught();
+                }
+        );
+
+        MAIN_REPLACER.addMappedParser(
+                "dex_count_seen",
+                "Dex Count Seen",
+                player -> {
+                    PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+                    return party.playerPokedex.countSeen();
                 }
         );
 
@@ -34,7 +45,7 @@ public class ReforgedPlayerParser_1_16_5 {
         );
 
         MAIN_REPLACER.addMappedParser(
-                "dexsize",
+                "dex_total_size",
                 "Dex Size",
                 player -> {
                      return Pokedex.pokedexSize;
@@ -72,6 +83,43 @@ public class ReforgedPlayerParser_1_16_5 {
                     return PERCENTAGE.format(((party.stats.getWins() * 1D) / party.stats.getLosses()) * 100D);
                 }
         );
+
+        MAIN_REPLACER.addMappedParser(
+                "average_level",
+                "Avarage Level of the Party",
+                player -> {
+                    PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+                    return party.getAverageLevel();
+                }
+        );
+
+
+        MAIN_REPLACER.addMappedParser(
+                "lowest_level",
+                "Lowest Level of the Party",
+                player -> {
+                    PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+                    return party.getLowestLevel();
+                }
+        );
+
+        MAIN_REPLACER.addMappedParser(
+                "highest_level",
+                "Highest Level of the Party",
+                player -> {
+                    PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+                    return party.getHighestLevel();
+                }
+        );
+
+        MAIN_REPLACER.addMappedParser(
+                "next_legendary",
+                "The seconds until the next Legendary Spawn",
+                player -> {
+                    return TimeUnit.MILLISECONDS.toSeconds(PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis());
+                }
+        );
+
 
         return MAIN_REPLACER;
     }

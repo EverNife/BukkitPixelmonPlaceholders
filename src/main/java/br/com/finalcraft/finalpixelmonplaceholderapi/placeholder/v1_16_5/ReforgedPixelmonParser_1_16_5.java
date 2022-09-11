@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 //This class is an adaptaion of https://github.com/NickImpact/GTS-Pixelmon-Extension
 //As the date of the creation of this class, there was still no support for Pixelmon 1.16.5
@@ -30,6 +31,18 @@ public class ReforgedPixelmonParser_1_16_5 {
     public static RegexReplacer<Pokemon> createPokemonReplacer(){
         final RegexReplacer<Pokemon> POKEMON_REPLACER = new RegexReplacer<>();
         final DecimalFormat PERCENTAGE = new DecimalFormat("#0.##");
+
+        POKEMON_REPLACER.addMappedParser(
+                "originaltrainer_name",
+                "Pokemon's original trainer name",
+                pokemon -> pokemon.getOriginalTrainer()
+        );
+
+        POKEMON_REPLACER.addMappedParser(
+                "originaltrainer_uuid",
+                "Pokemon's original trainer UUID",
+                pokemon -> pokemon.getOriginalTrainerUUID()
+        );
 
         POKEMON_REPLACER.addMappedParser(
                 "name",
@@ -56,6 +69,18 @@ public class ReforgedPixelmonParser_1_16_5 {
         );
 
         POKEMON_REPLACER.addMappedParser(
+                "exp",
+                "Pokemon's Exp",
+                pokemon -> pokemon.getExperience()
+        );
+
+        POKEMON_REPLACER.addMappedParser(
+                "exp_to_level_up",
+                "Pokemon's Exp",
+                pokemon -> pokemon.getExperienceToLevelUp()
+        );
+
+        POKEMON_REPLACER.addMappedParser(
                 "form",
                 "Pokemon's Form",
                 pokemon -> {
@@ -63,6 +88,12 @@ public class ReforgedPixelmonParser_1_16_5 {
                             .map(form -> form.getLocalizedName())
                             .orElse("N/A");
                 }
+        );
+
+        POKEMON_REPLACER.addMappedParser(
+                "shiny",
+                "Pokemon Shiny State",
+                pokemon -> pokemon.isShiny()
         );
 
         POKEMON_REPLACER.addMappedParser(
@@ -74,12 +105,6 @@ public class ReforgedPixelmonParser_1_16_5 {
                     }
                     return "";
                 }
-        );
-
-        POKEMON_REPLACER.addMappedParser(
-                "shiny",
-                "Pokemon Shiny State",
-                pokemon -> pokemon.isShiny()
         );
 
         POKEMON_REPLACER.addMappedParser(
@@ -115,10 +140,17 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
+        Function<Pokemon, Object> getGrowth = pokemon -> pokemon.getGrowth().getLocalizedName();
         POKEMON_REPLACER.addMappedParser(
                 "size",
-                "Pokemon's Size",
-                pokemon -> pokemon.getGrowth().getLocalizedName()
+                "Pokemon's Growth",
+                getGrowth
+        );
+
+        POKEMON_REPLACER.addMappedParser(
+                "growth",
+                "Pokemon's Growth",
+                getGrowth
         );
 
         POKEMON_REPLACER.addMappedParser(
@@ -277,7 +309,7 @@ public class ReforgedPixelmonParser_1_16_5 {
         );
 
         POKEMON_REPLACER.addMappedParser(
-                "egg-steps",
+                "egg_steps",
                 "Amount of steps remaining for an egg",
                 pokemon -> {
                     if(pokemon.isEgg()) {
