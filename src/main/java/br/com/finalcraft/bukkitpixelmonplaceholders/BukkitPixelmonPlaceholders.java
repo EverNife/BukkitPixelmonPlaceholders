@@ -1,17 +1,17 @@
-package br.com.finalcraft.finalpixelmonplaceholderapi;
+package br.com.finalcraft.bukkitpixelmonplaceholders;
 
 import br.com.finalcraft.evernifecore.ecplugin.annotations.ECPlugin;
-import br.com.finalcraft.finalpixelmonplaceholderapi.placeholder.PixelmonPlaceholders;
+import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.PixelmonPlaceholders;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @ECPlugin(
-        bstatsID = "15984",
+        bstatsID = "16405",
         spigotID = "105174"
 )
-public class FinalPixelmonPlaceholderAPI extends JavaPlugin{
+public class BukkitPixelmonPlaceholders extends JavaPlugin{
 
-    public static FinalPixelmonPlaceholderAPI instance;
+    public static BukkitPixelmonPlaceholders instance;
 
     public static void info(String msg){
         instance.getLogger().info("[Info] " + msg);

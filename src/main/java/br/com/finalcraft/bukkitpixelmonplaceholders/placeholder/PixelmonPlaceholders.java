@@ -1,4 +1,4 @@
-package br.com.finalcraft.finalpixelmonplaceholderapi.placeholder;
+package br.com.finalcraft.bukkitpixelmonplaceholders.placeholder;
 
 import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
 import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
@@ -6,14 +6,12 @@ import br.com.finalcraft.evernifecore.integration.placeholders.PAPIIntegration;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import br.com.finalcraft.evernifecore.util.FCInputReader;
 import br.com.finalcraft.evernifecore.version.MCVersion;
-import br.com.finalcraft.finalpixelmonplaceholderapi.FinalPixelmonPlaceholderAPI;
-import br.com.finalcraft.finalpixelmonplaceholderapi.placeholder.v1_16_5.ReforgedPixelmonParser_1_16_5;
-import br.com.finalcraft.finalpixelmonplaceholderapi.placeholder.v1_16_5.ReforgedPlayerParser_1_16_5;
+import br.com.finalcraft.bukkitpixelmonplaceholders.BukkitPixelmonPlaceholders;
+import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.v1_16_5.ReforgedPixelmonParser_1_16_5;
+import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.v1_16_5.ReforgedPlayerParser_1_16_5;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.storage.PartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
-
-import java.text.DecimalFormat;
 
 
 public class PixelmonPlaceholders {
@@ -50,7 +48,7 @@ public class PixelmonPlaceholders {
     }
 
     public static void registerToPAPI(){
-        RegexReplacer<PlayerData> PAPI_REPLACER = PAPIIntegration.createPlaceholderIntegration(FinalPixelmonPlaceholderAPI.instance, "pixelmon", PlayerData.class);
+        RegexReplacer<PlayerData> PAPI_REPLACER = PAPIIntegration.createPlaceholderIntegration(BukkitPixelmonPlaceholders.instance, "pixelmon", PlayerData.class);
         PAPI_REPLACER.setDefaultParser((playerData, placeholder) -> {
             // In here, '%pixelmon_custom_placeholder%' turns into '%custom_placeholder%'
             return MAIN_REPLACER.apply("%" + placeholder + "%", playerData);

@@ -1,6 +1,5 @@
-package br.com.finalcraft.finalpixelmonplaceholderapi.placeholder.v1_16_5;
+package br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.v1_16_5;
 
-import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.api.Flags;
