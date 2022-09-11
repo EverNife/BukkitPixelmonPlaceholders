@@ -15,6 +15,8 @@ This plugin requires:
 - [EverNifeCore](https://github.com/evernife/EverNifeCore)
 - [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)
 
+# Placeholders
+
 Player Info
 - Generic
     - %pixelmon_partysize% - Gets the number of Pokemon In a player's party
