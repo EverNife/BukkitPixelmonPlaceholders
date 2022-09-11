@@ -1,5 +1,5 @@
 name: BukkitPixelmonPlaceholders
-version: 1.0.2
+version: 1.0.3
 author: EverNife
 main: br.com.finalcraft.bukkitpixelmonplaceholders.BukkitPixelmonPlaceholders
 depend: [ EverNifeCore ]
