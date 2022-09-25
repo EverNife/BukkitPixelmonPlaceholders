@@ -18,6 +18,42 @@ public class ReforgedPlayerParser_1_16_5 {
         final DecimalFormat PERCENTAGE = new DecimalFormat("#0.##");
 
         MAIN_REPLACER.addMappedParser(
+                "party_size_all",
+                "Number of Pokemons In a player's party",
+                player -> {
+                    PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+                    return party.countAll();
+                }
+        );
+
+        MAIN_REPLACER.addMappedParser(
+                "party_size_ableonly",
+                "Number of Able Pokemons In a player's party",
+                player -> {
+                    PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+                    return party.countAblePokemon();
+                }
+        );
+
+        MAIN_REPLACER.addMappedParser(
+                "party_size_eggonly",
+                "Number of Egg Pokemons In a player's party",
+                player -> {
+                    PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+                    return party.countEggs();
+                }
+        );
+
+        MAIN_REPLACER.addMappedParser(
+                "party_size_pokemononly",
+                "Number of Normal Pokemons In a player's party",
+                player -> {
+                    PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+                    return party.countPokemon();
+                }
+        );
+
+        MAIN_REPLACER.addMappedParser(
                 "dex_count_caught",
                 "Dex Count Caught",
                 player -> {

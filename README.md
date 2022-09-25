@@ -19,7 +19,10 @@ This plugin requires:
 
 Player Info
 - Generic
-    - %pixelmon_partysize% - Gets the number of Pokemon In a player's party
+    - %pixelmon_party_size_all% - Gets the number of Pokemons (couting eggs as well) In a player's party
+    - %pixelmon_party_size_ableonly% - Gets the number of Pokemons (only Able Pokemons) In a player's party
+    - %pixelmon_party_size_eggonly% - Gets the number of Pokemon Eggs In a player's party
+    - %pixelmon_party_size_pokemononly% - Gets the number of Pokemons (ignoring eggs) In a player's party
     - %pixelmon_wins% - Gets the player's wins
     - %pixelmon_losses% - Gets the player's losses
     - %pixelmon_kdr% - Gets the player's win loss ratio
