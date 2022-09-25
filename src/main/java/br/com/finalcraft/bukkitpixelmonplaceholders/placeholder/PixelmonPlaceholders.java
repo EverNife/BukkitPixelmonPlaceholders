@@ -33,13 +33,13 @@ public class PixelmonPlaceholders {
                         String pokemonPlaceholder = '%' + split[1] + '%';
 
                         PartyStorage partyStorage = StorageProxy.getParty(iPlayerData.getUniqueId());
-                        Pokemon pokemon = partyStorage.get(slot);
+                        Pokemon pokemon = partyStorage.get(slot - 1);
                         if (pokemon != null){
                             return POKEMON_REPLACER.apply(pokemonPlaceholder, pokemon);
                         }
                     }catch (Exception e){
                         e.printStackTrace();
-                        return "[Error reading placeholder]";
+                        return "[Error Reading Placeholder]";
                     }
                 }
                 return null;
