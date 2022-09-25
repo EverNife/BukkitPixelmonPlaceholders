@@ -30,7 +30,7 @@ Player Info
     - %pixelmon_average_level% - Gets the player's party's average level
     - %pixelmon_lowest_level% - Gets the player's party's lowest level
     - %pixelmon_highest_level% - Gets the player's party's highest level
-    - %pixelmon_nextlegendary% - Gets the next legendary spawn time
+    - %pixelmon_next_legendary% - Gets the next legendary spawn time
 
 
 
