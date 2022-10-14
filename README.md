@@ -17,6 +17,11 @@ This plugin requires:
 
 # Placeholders
 
+Command for testing the placeholders:
+> **/bpp test** _(permission: bukkitpixelmonplaceholders.command.test)_
+![bpp-test-command.png](bpp-test-command.png)
+
+
 Player Info
 - Generic
     - %pixelmon_party_size_all% - Gets the number of Pokemons (couting eggs as well) In a player's party
