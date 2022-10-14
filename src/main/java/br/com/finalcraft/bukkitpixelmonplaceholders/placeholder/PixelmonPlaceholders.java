@@ -1,14 +1,14 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders.placeholder;
 
+import br.com.finalcraft.bukkitpixelmonplaceholders.BukkitPixelmonPlaceholders;
+import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.v1_16_5.ReforgedPixelmonParser_1_16_5;
+import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.v1_16_5.ReforgedPlayerParser_1_16_5;
 import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
 import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
 import br.com.finalcraft.evernifecore.integration.placeholders.PAPIIntegration;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import br.com.finalcraft.evernifecore.util.FCInputReader;
 import br.com.finalcraft.evernifecore.version.MCVersion;
-import br.com.finalcraft.bukkitpixelmonplaceholders.BukkitPixelmonPlaceholders;
-import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.v1_16_5.ReforgedPixelmonParser_1_16_5;
-import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.v1_16_5.ReforgedPlayerParser_1_16_5;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.storage.PartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
@@ -27,8 +27,8 @@ public class PixelmonPlaceholders {
             MAIN_REPLACER.setDefaultParser((iPlayerData, placeholder) -> {
                 if (placeholder.startsWith("party_slot_")){
                     try {
-                        String subPlaceholder = placeholder.substring(11);
-                        String[] split = subPlaceholder.split("_");
+                        String subPlaceholder = placeholder.substring(11); // "party_slot_".lengh() == 11
+                        String[] split = subPlaceholder.split("_", 2); // split between "number" and "the_rest"
                         Integer slot = FCInputReader.parseInt(split[0]);
                         String pokemonPlaceholder = '%' + split[1] + '%';
 
@@ -36,6 +36,12 @@ public class PixelmonPlaceholders {
                         Pokemon pokemon = partyStorage.get(slot - 1);
                         if (pokemon != null){
                             return POKEMON_REPLACER.apply(pokemonPlaceholder, pokemon);
+                        }else {
+                            try {
+                                return POKEMON_REPLACER.apply(pokemonPlaceholder, null);
+                            }catch (Exception e){
+                                return ""; //Empty String when there is a Pokemon Dependent Placeholder
+                            }
                         }
                     }catch (Exception e){
                         e.printStackTrace();
