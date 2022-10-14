@@ -4,12 +4,14 @@ import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.api.Flags;
 import com.pixelmonmod.pixelmon.api.config.PixelmonConfigProxy;
+import com.pixelmonmod.pixelmon.api.pokemon.Element;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.pokemon.species.gender.Gender;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.EVStore;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.IVStore;
+import com.pixelmonmod.pixelmon.api.pokemon.stats.Moveset;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.extraStats.LakeTrioStats;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.extraStats.MewStats;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
@@ -22,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 //This class is an adaptaion of https://github.com/NickImpact/GTS-Pixelmon-Extension
 //As the date of the creation of this class, there was still no support for Pixelmon 1.16.5
@@ -136,6 +139,41 @@ public class ReforgedPixelmonParser_1_16_5 {
                     }
 
                     return result;
+                }
+        );
+
+        POKEMON_REPLACER.addMappedParser(
+                "type_all",
+                "Pokemon's (All) Types",
+                pokemon -> {
+                    return pokemon.getForm().getTypes()
+                            .stream()
+                            .map(Element::getLocalizedName)
+                            .collect(Collectors.joining(", "));
+                }
+        );
+
+        POKEMON_REPLACER.addMappedParser(
+                "type_1",
+                "Pokemon's First Type",
+                pokemon -> {
+                    List<Element> elements = pokemon.getForm().getTypes();
+                    if (elements.size() > 0){
+                        return elements.get(0).getLocalizedName();
+                    }
+                    return "";
+                }
+        );
+
+        POKEMON_REPLACER.addMappedParser(
+                "type_2",
+                "Pokemon's Second Type",
+                pokemon -> {
+                    List<Element> elements = pokemon.getForm().getTypes();
+                    if (elements.size() > 1){
+                        return elements.get(1).getLocalizedName();
+                    }
+                    return "";
                 }
         );
 
@@ -254,7 +292,8 @@ public class ReforgedPixelmonParser_1_16_5 {
                         return "";
                     }
 
-                    return pokemon.getHeldItem().getDisplayName();
+                    // Getting the name of the item that the pokemon is holding.
+                    return pokemon.getHeldItem().getItem().getName(pokemon.getHeldItem()).getString();
                 }
         );
 

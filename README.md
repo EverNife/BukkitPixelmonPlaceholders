@@ -54,6 +54,9 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_ability% - Gets the pokemon's ability in the given slot
     - %pixelmon_party_slot_1_gender% - Gets the pokemon's gender in the given slot
     - %pixelmon_party_slot_1_nature% - Gets the pokemon's nature in the given slot
+    - %pixelmon_party_slot_1_type_all% - Gets all the pokemon's type (elements) in the given slot
+    - %pixelmon_party_slot_1_type_1% - Gets the first pokemon's type (element) in the given slot
+    - %pixelmon_party_slot_1_type_2% - Gets the second pokemon's type (element) in the given slot
     - %pixelmon_party_slot_1_growth% - Gets the pokemon's growth in the given slot
     - %pixelmon_party_slot_1_unbreedable% - Gets if the pokemon is unbreedable
     - %pixelmon_party_slot_1_dynamax_level% - Gets the pokemon's Dynamax Level
