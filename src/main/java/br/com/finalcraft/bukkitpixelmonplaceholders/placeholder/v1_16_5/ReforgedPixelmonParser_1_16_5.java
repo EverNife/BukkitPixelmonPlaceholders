@@ -110,6 +110,35 @@ public class ReforgedPixelmonParser_1_16_5 {
         );
 
         POKEMON_REPLACER.addMappedParser(
+                "is_egg",
+                "Pokemon is Egg",
+                pokemon -> pokemon.isEgg()
+        );
+
+        POKEMON_REPLACER.addMappedParser(
+                "is_non_egg",
+                "Pokemon is Egg",
+                pokemon -> !pokemon.isEgg()
+        );
+
+        POKEMON_REPLACER.addMappedParser(
+                "is_legendary",
+                "Pokemon Legendary State",
+                pokemon -> pokemon.isLegendary()
+        );
+
+        POKEMON_REPLACER.addMappedParser(
+                "is_legendary_special",
+                "A Preformatted Representation of Legendary State",
+                pokemon -> {
+                    if(pokemon.isLegendary()) {
+                        return ChatColor.GRAY + "(" + ChatColor.GOLD + "Shiny" + ChatColor.GRAY + ")";
+                    }
+                    return "";
+                }
+        );
+
+        POKEMON_REPLACER.addMappedParser(
                 "ability",
                 "Pokemon's Ability",
                 pokemon -> {

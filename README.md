@@ -54,6 +54,10 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_form% - Gets the pokemon's form in the given slot
     - %pixelmon_party_slot_1_shiny% - Gets the pokemon's shiny status in the given slot
     - %pixelmon_party_slot_1_shiny_special% - Gets the pokemon's shiny status in the given slot with a colored String.
+    - %pixelmon_party_slot_1_is_egg% - Gets if the pokemon is an egg (true/false);
+    - %pixelmon_party_slot_1_is_non_egg% - Gets if the pokemon is not an egg (true/false);
+    - %pixelmon_party_slot_1_is_legendary% - Gets if the pokemon is legendary;
+    - %pixelmon_party_slot_1_is_legendary_special% - Gets if the pokemon is legendary with a colored String.
     - %pixelmon_party_slot_1_originaltrainer_name% - Gets the pokemon's Original Trainer Name
     - %pixelmon_party_slot_1_originaltrainer_uuid% - Gets the pokemon's Original Trainer UUID
     - %pixelmon_party_slot_1_ability% - Gets the pokemon's ability in the given slot
