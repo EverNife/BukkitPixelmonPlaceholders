@@ -16,11 +16,9 @@ import br.com.finalcraft.evernifecore.util.ReflectionUtil;
 import br.com.finalcraft.evernifecore.util.pageviwer.PageViewer;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 @FinalCMD(
@@ -43,9 +41,12 @@ public class CMDCoreCommand {
                 PixelmonPlaceholders.POKEMON_REPLACER.getDefaultProvider()
         );
 
+        List<SimpleParser> list1 = parserMapPlayerData.values().stream().sorted(Comparator.comparing(SimpleParser::getId)).collect(Collectors.toList());
+        List<SimpleParser> list2 = parserMapPixelmon.values().stream().sorted(Comparator.comparing(SimpleParser::getId)).collect(Collectors.toList());
+
         List<SimpleParser> allPossiblePlaceholders = new ArrayList<>();
-        allPossiblePlaceholders.addAll(parserMapPlayerData.values());
-        allPossiblePlaceholders.addAll(parserMapPixelmon.values());
+        allPossiblePlaceholders.addAll(list1);
+        allPossiblePlaceholders.addAll(list2);
 
         Function<SimpleParser, String> getPlaceholder = simpleParser -> {
             if (parserMapPlayerData.containsValue(simpleParser)){
