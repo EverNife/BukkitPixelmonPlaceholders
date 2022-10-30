@@ -11,10 +11,10 @@ import com.pixelmonmod.pixelmon.api.pokemon.species.gender.Gender;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.EVStore;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.IVStore;
-import com.pixelmonmod.pixelmon.api.pokemon.stats.Moveset;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.extraStats.LakeTrioStats;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.extraStats.MewStats;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
+import com.pixelmonmod.pixelmon.api.util.helpers.SpriteItemHelper;
 import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.attacks.specialAttacks.basic.HiddenPower;
 import org.bukkit.ChatColor;
@@ -410,6 +410,12 @@ public class ReforgedPixelmonParser_1_16_5 {
                 "can_gmax",
                 "Pokemon G-Max Potential",
                 pokemon -> pokemon.hasGigantamaxFactor()
+        );
+
+        POKEMON_REPLACER.addMappedParser(
+                "sprite",
+                "Pokemon Sprite",
+                pokemon -> SpriteItemHelper.getPhoto(pokemon).getTag().toString()
         );
 
         return POKEMON_REPLACER;

@@ -76,6 +76,7 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_hidden_power% - Gets the pokemon's Hidden Power
     - %pixelmon_party_slot_1_egg_steps% - Gets the pokemon's Amount of steps remaining for an egg
     - %pixelmon_party_slot_1_can_gmax% - Gets the pokemon's G-Max Potential
+    - %pixelmon_party_slot_1_sprite% - Gets the pokemon's Sprite's NBT
 
 
 - EVS Stats
