@@ -34,55 +34,55 @@ public class ReforgedPixelmonParser_1_16_5 {
         final RegexReplacer<Pokemon> POKEMON_REPLACER = new RegexReplacer<>();
         final DecimalFormat PERCENTAGE = new DecimalFormat("#0.##");
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "originaltrainer_name",
                 "Pokemon's original trainer name",
                 pokemon -> pokemon.getOriginalTrainer()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "originaltrainer_uuid",
                 "Pokemon's original trainer UUID",
                 pokemon -> pokemon.getOriginalTrainerUUID()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "name",
                 "Pokemon's LocalizedName",
                 pokemon -> pokemon.getLocalizedName()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "display_name",
                 "Pokemon's Display Name",
                 pokemon -> pokemon.getDisplayName()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "species",
                 "Pokemon's Species",
                 pokemon -> pokemon.getSpecies().getLocalizedName()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "level",
                 "Pokemon's Level",
                 pokemon -> pokemon.getPokemonLevel()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "exp",
                 "Pokemon's Exp",
                 pokemon -> pokemon.getExperience()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "exp_to_level_up",
                 "Pokemon's Exp",
                 pokemon -> pokemon.getExperienceToLevelUp()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "form",
                 "Pokemon's Form",
                 pokemon -> {
@@ -92,13 +92,13 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "shiny",
                 "Pokemon Shiny State",
                 pokemon -> pokemon.isShiny()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "shiny_special",
                 "A Preformatted Representation of Shiny State",
                 pokemon -> {
@@ -109,25 +109,25 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "is_egg",
                 "Pokemon is Egg",
                 pokemon -> pokemon.isEgg()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "is_non_egg",
                 "Pokemon is Egg",
                 pokemon -> !pokemon.isEgg()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "is_legendary",
                 "Pokemon Legendary State",
                 pokemon -> pokemon.isLegendary()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "is_legendary_special",
                 "A Preformatted Representation of Legendary State",
                 pokemon -> {
@@ -138,7 +138,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "ability",
                 "Pokemon's Ability",
                 pokemon -> {
@@ -146,7 +146,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "gender",
                 "Pokemon's Gender",
                 pokemon -> {
@@ -158,7 +158,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "nature",
                 "Pokemon's Nature",
                 pokemon -> {
@@ -171,7 +171,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "type_all",
                 "Pokemon's (All) Types",
                 pokemon -> {
@@ -182,7 +182,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "type_1",
                 "Pokemon's First Type",
                 pokemon -> {
@@ -194,7 +194,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "type_2",
                 "Pokemon's Second Type",
                 pokemon -> {
@@ -207,19 +207,19 @@ public class ReforgedPixelmonParser_1_16_5 {
         );
 
         Function<Pokemon, Object> getGrowth = pokemon -> pokemon.getGrowth().getLocalizedName();
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "size",
                 "Pokemon's Growth",
                 getGrowth
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "growth",
                 "Pokemon's Growth",
                 getGrowth
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "unbreedable",
                 "Whether a Pokemon is Breedable or not",
                 pokemon -> {
@@ -233,7 +233,7 @@ public class ReforgedPixelmonParser_1_16_5 {
 
         for(String stat : Arrays.asList("ev", "iv")) {
 
-            POKEMON_REPLACER.addMappedParser(
+            POKEMON_REPLACER.addParser(
                     stat + "_total",
                     "A Pokemon's " + stat.toUpperCase() + " Stat Total",
                     pokemon -> {
@@ -245,7 +245,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                     }
             );
 
-            POKEMON_REPLACER.addMappedParser(
+            POKEMON_REPLACER.addParser(
                     stat + "_total_max",
                     "A Pokemon's " + stat.toUpperCase() + " Stat Total",
                     pokemon -> {
@@ -258,7 +258,7 @@ public class ReforgedPixelmonParser_1_16_5 {
             );
 
             for (BattleStatsType type : BattleStatsType.getEVIVStatValues()) {
-                POKEMON_REPLACER.addMappedParser(
+                POKEMON_REPLACER.addParser(
                         stat + "_" + type.name().toLowerCase(),
                         "A Pokemon's " + type.getLocalizedName() + " " + stat.toUpperCase() + " Stat",
                         pokemon -> {
@@ -277,7 +277,7 @@ public class ReforgedPixelmonParser_1_16_5 {
             }
         }
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "ev_percentage",
                 "A Pokemon's Percentage of Total EVs Gained",
                 pokemon -> {
@@ -291,7 +291,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "iv_percentage",
                 "A Pokemon's Percentage of Total IVs Gained",
                 pokemon -> {
@@ -307,13 +307,13 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "dynamax_level",
                 "A Pokemon's Dynamax Level",
                 pokemon -> pokemon.getDynamaxLevel()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "held_item",
                 "A Pokemon's Held Item",
                 pokemon -> {
@@ -326,7 +326,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "texture",
                 "A Pokemon's Custom Texture",
                 pokemon -> {
@@ -340,7 +340,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "clones",
                 "Number of Mew Clones",
                 pokemon -> {
@@ -353,7 +353,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "enchantments",
                 "Number of Lake Trio Enchantments",
                 pokemon -> {
@@ -369,13 +369,13 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "hidden_power",
                 "A Pokemon's Hidden Power",
                 pokemon -> HiddenPower.getHiddenPowerType(null, pokemon, pokemon.getIVs(), "PlaceholderAPI")
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "egg_steps",
                 "Amount of steps remaining for an egg",
                 pokemon -> {
@@ -392,7 +392,7 @@ public class ReforgedPixelmonParser_1_16_5 {
 
         for(int i = 0; i < 4; i++) {
             final int index = i;
-            POKEMON_REPLACER.addMappedParser(
+            POKEMON_REPLACER.addParser(
                     "move" + (i + 1),
                     "Pokemon's Move at index: " + (i + 1),
                     pokemon -> {
@@ -406,13 +406,13 @@ public class ReforgedPixelmonParser_1_16_5 {
             );
         }
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "can_gmax",
                 "Pokemon G-Max Potential",
                 pokemon -> pokemon.hasGigantamaxFactor()
         );
 
-        POKEMON_REPLACER.addMappedParser(
+        POKEMON_REPLACER.addParser(
                 "sprite",
                 "Pokemon Sprite",
                 pokemon -> SpriteItemHelper.getPhoto(pokemon).getTag().toString()

@@ -13,7 +13,7 @@ apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle'
 
 group 'br.com.finalcraft'
-version '1.0.5'
+version '1.0.6'
 
 minecraft {
     mappings channel: 'official', version: '1.16.5'
@@ -45,12 +45,12 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
 
-    compile "br.com.finalcraft:EverNifeCore:2.0.2"
+    compile "br.com.finalcraft:EverNifeCore:2.0.3"
 
     compile 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
-    compileOnly name: "Pixelmon-1.16.5-9.0.11-server"
+    compileOnly name: "Pixelmon-1.16.5-9.1.0-universal-noAssets"
 
     //Annotations
     compile 'org.jetbrains:annotations:23.0.0'

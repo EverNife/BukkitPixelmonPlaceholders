@@ -17,7 +17,7 @@ public class ReforgedPlayerParser_1_16_5 {
         final RegexReplacer<IPlayerData> MAIN_REPLACER = new RegexReplacer<>();
         final DecimalFormat PERCENTAGE = new DecimalFormat("#0.##");
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "party_size_all",
                 "Number of Pokemons In a player's party",
                 player -> {
@@ -26,7 +26,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "party_size_ableonly",
                 "Number of Able Pokemons In a player's party",
                 player -> {
@@ -35,7 +35,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "party_size_eggonly",
                 "Number of Egg Pokemons In a player's party",
                 player -> {
@@ -44,7 +44,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "party_size_pokemononly",
                 "Number of Normal Pokemons In a player's party",
                 player -> {
@@ -53,7 +53,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "dex_count_caught",
                 "Dex Count Caught",
                 player -> {
@@ -62,7 +62,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "dex_count_seen",
                 "Dex Count Seen",
                 player -> {
@@ -71,7 +71,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "dex_percentage",
                 "Dex Percentage",
                 player -> {
@@ -80,7 +80,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "dex_total_size",
                 "Dex Size",
                 player -> {
@@ -88,7 +88,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "losses",
                 "Player's Losses",
                 player -> {
@@ -97,7 +97,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "wins",
                 "Player's Wins",
                 player -> {
@@ -106,7 +106,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "kdr",
                 "Player's Kill Death Ratio",
                 player -> {
@@ -120,7 +120,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "average_level",
                 "Avarage Level of the Party",
                 player -> {
@@ -130,7 +130,7 @@ public class ReforgedPlayerParser_1_16_5 {
         );
 
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "lowest_level",
                 "Lowest Level of the Party",
                 player -> {
@@ -139,7 +139,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "highest_level",
                 "Highest Level of the Party",
                 player -> {
@@ -148,7 +148,7 @@ public class ReforgedPlayerParser_1_16_5 {
                 }
         );
 
-        MAIN_REPLACER.addMappedParser(
+        MAIN_REPLACER.addParser(
                 "next_legendary",
                 "The seconds until the next Legendary Spawn",
                 player -> {

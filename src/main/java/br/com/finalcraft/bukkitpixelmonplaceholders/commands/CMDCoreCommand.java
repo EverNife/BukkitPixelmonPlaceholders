@@ -8,11 +8,9 @@ import br.com.finalcraft.evernifecore.commands.finalcmd.annotations.FinalCMD;
 import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
 import br.com.finalcraft.evernifecore.fancytext.FancyText;
 import br.com.finalcraft.evernifecore.integration.placeholders.PAPIIntegration;
-import br.com.finalcraft.evernifecore.placeholder.base.PlaceholderProvider;
 import br.com.finalcraft.evernifecore.placeholder.parser.SimpleParser;
 import br.com.finalcraft.evernifecore.util.FCColorUtil;
 import br.com.finalcraft.evernifecore.util.FCTextUtil;
-import br.com.finalcraft.evernifecore.util.ReflectionUtil;
 import br.com.finalcraft.evernifecore.util.pageviwer.PageViewer;
 import org.bukkit.entity.Player;
 
@@ -33,23 +31,29 @@ public class CMDCoreCommand {
     )
     public void test(Player player, PlayerData playerData, @Arg(name = "[page]", context = "[1:*]") Integer page){
 
-        Map<String, SimpleParser> parserMapPlayerData = (Map<String, SimpleParser>) ReflectionUtil.getField(PlaceholderProvider.class, "parser_map").get(
-                PixelmonPlaceholders.MAIN_REPLACER.getDefaultProvider()
-        );
-
-        Map<String, SimpleParser> parserMapPixelmon = (Map<String, SimpleParser>) ReflectionUtil.getField(PlaceholderProvider.class, "parser_map").get(
-                PixelmonPlaceholders.POKEMON_REPLACER.getDefaultProvider()
-        );
-
-        List<SimpleParser> list1 = parserMapPlayerData.values().stream().sorted(Comparator.comparing(SimpleParser::getId)).collect(Collectors.toList());
-        List<SimpleParser> list2 = parserMapPixelmon.values().stream().sorted(Comparator.comparing(SimpleParser::getId)).collect(Collectors.toList());
-
         List<SimpleParser> allPossiblePlaceholders = new ArrayList<>();
-        allPossiblePlaceholders.addAll(list1);
-        allPossiblePlaceholders.addAll(list2);
 
+        allPossiblePlaceholders.addAll(
+                PixelmonPlaceholders.MAIN_REPLACER.getProvider()
+                        .getParserMap()
+                        .values()
+                        .stream()
+                        .sorted(Comparator.comparing(SimpleParser::getId))
+                        .collect(Collectors.toList())
+        );
+
+        allPossiblePlaceholders.addAll(
+                PixelmonPlaceholders.POKEMON_REPLACER.getProvider()
+                        .getParserMap()
+                        .values()
+                        .stream()
+                        .sorted(Comparator.comparing(SimpleParser::getId))
+                        .collect(Collectors.toList())
+        );
+
+        //Apply format on the placeholder based on its parser
         Function<SimpleParser, String> getPlaceholder = simpleParser -> {
-            if (parserMapPlayerData.containsValue(simpleParser)){
+            if (PixelmonPlaceholders.MAIN_REPLACER.getProvider().getParserMap().containsValue(simpleParser)){
                 return "§6%pixelmon_§e" + simpleParser.getId() + "§6%";
             }else {
                 return "§6%pixelmon_party_slot_1_§e" + simpleParser.getId() + "§6%";
@@ -71,7 +75,11 @@ public class CMDCoreCommand {
                 )
                 .setFormatLine(
                         FancyText.of("§7#  %number%:   §7%the_placeholder%§r - §b%the_result%")
-                                .setHoverText("§bDescription\n\n§2-§a %description%\n\n§7[Click to Copy]")
+                                .setHoverText("§bDescription" +
+                                        "\n" +
+                                        "\n§2-§a %description%" +
+                                        "\n" +
+                                        "\n§e[Click to Copy]")
                                 .setSuggestCommandAction("%the_placeholder_striped%")
                 )
                 .addPlaceholder("%the_placeholder%", simpleParser -> getPlaceholder.apply(simpleParser))

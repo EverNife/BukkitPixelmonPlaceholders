@@ -8,6 +8,7 @@ import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
 import br.com.finalcraft.evernifecore.integration.placeholders.PAPIIntegration;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import br.com.finalcraft.evernifecore.util.FCInputReader;
+import br.com.finalcraft.evernifecore.util.numberwrapper.NumberWrapper;
 import br.com.finalcraft.evernifecore.version.MCVersion;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.storage.PartyStorage;
@@ -24,31 +25,27 @@ public class PixelmonPlaceholders {
             MAIN_REPLACER = ReforgedPlayerParser_1_16_5.createMainReplacer();
             POKEMON_REPLACER = ReforgedPixelmonParser_1_16_5.createPokemonReplacer();
 
-            MAIN_REPLACER.setDefaultParser((iPlayerData, placeholder) -> {
-                if (placeholder.startsWith("party_slot_")){
-                    try {
-                        String subPlaceholder = placeholder.substring(11); // "party_slot_".lengh() == 11
-                        String[] split = subPlaceholder.split("_", 2); // split between "number" and "the_rest"
-                        Integer slot = FCInputReader.parseInt(split[0]);
-                        String pokemonPlaceholder = '%' + split[1] + '%';
+            MAIN_REPLACER.addManipulator("party_slot_{slotNumber}_{pokemonPlaceholder}", POKEMON_REPLACER, (iPlayerData, pokemonRContext) -> {
+                Integer slot = FCInputReader.parseInt(pokemonRContext.getString("{slotNumber}"));
 
-                        PartyStorage partyStorage = StorageProxy.getParty(iPlayerData.getUniqueId());
-                        Pokemon pokemon = partyStorage.get(slot - 1);
-                        if (pokemon != null){
-                            return POKEMON_REPLACER.apply(pokemonPlaceholder, pokemon);
-                        }else {
-                            try {
-                                return POKEMON_REPLACER.apply(pokemonPlaceholder, null);
-                            }catch (Exception e){
-                                return ""; //Empty String when there is a Pokemon Dependent Placeholder
-                            }
-                        }
+                if (slot == null || !NumberWrapper.of(slot).isBounded(1,6)){
+                    return "[Invalid Party Slot Number]";
+                }
+
+                String pokemonPlaceholder = pokemonRContext.getString("{pokemonPlaceholder}");
+
+                PartyStorage partyStorage = StorageProxy.getParty(iPlayerData.getUniqueId());
+                Pokemon pokemon = partyStorage.get(slot - 1);
+
+                if (pokemon != null){
+                    return pokemonRContext.quoteAndParse(pokemon, pokemonPlaceholder);
+                }else {
+                    try {
+                        return pokemonRContext.quoteAndParse(null, pokemonPlaceholder);
                     }catch (Exception e){
-                        e.printStackTrace();
-                        return "[Error Reading Placeholder]";
+                        return ""; //Empty String when there is a Pokemon Dependent Placeholder
                     }
                 }
-                return null;
             });
         }
     }
