@@ -21,7 +21,7 @@ public class PixelmonPlaceholders {
     public static RegexReplacer<Pokemon> POKEMON_REPLACER;
 
     static {
-        if (!MCVersion.isBellow1_13()){
+        if (MCVersion.isEqual(MCVersion.v1_16)){
             MAIN_REPLACER = ReforgedPlayerParser_1_16_5.createMainReplacer();
             POKEMON_REPLACER = ReforgedPixelmonParser_1_16_5.createPokemonReplacer();
 

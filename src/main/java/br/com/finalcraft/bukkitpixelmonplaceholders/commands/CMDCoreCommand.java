@@ -66,10 +66,9 @@ public class CMDCoreCommand {
             simplePlaceholderOrder.put(allPossiblePlaceholders.get(i).getId(), i);
         }
 
-        PageViewer<SimpleParser, Integer> ALL_PLACEHOLDERS = PageViewer.builder(
-                        () -> allPossiblePlaceholders,
-                        simpleParser -> simplePlaceholderOrder.size() - simplePlaceholderOrder.get(simpleParser.getId()) //keep the same order it was inserted
-                )
+        PageViewer<SimpleParser, Integer> ALL_PLACEHOLDERS = PageViewer.targeting(SimpleParser.class)
+                .withSuplier(() -> allPossiblePlaceholders)
+                .extracting(simpleParser -> simplePlaceholderOrder.size() - simplePlaceholderOrder.get(simpleParser.getId())) //keep the same order it was inserted
                 .setFormatHeader(
                         FCTextUtil.alignCenter("§6 §l[§ePixelmon Placeholders§6§l]§6 §r","§e§m-")
                 )

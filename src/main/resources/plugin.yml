@@ -4,3 +4,4 @@ author: EverNife
 main: br.com.finalcraft.bukkitpixelmonplaceholders.BukkitPixelmonPlaceholders
 depend: [ EverNifeCore ]
 softdepend: [ PlaceholderAPI ]
+api-version: 1.13
