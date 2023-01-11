@@ -45,6 +45,7 @@ Player Info
 Party Info - *Change **1** to whatever party slot you want to display Information on:*
 
 - Generic
+    - %pixelmon_party_slot_1_pokedex_number% - Gets the pokemon's National Index
     - %pixelmon_party_slot_1_exp% - Gets the pokemon's exp in the given slot
     - %pixelmon_party_slot_1_exp_to_level_up% - Gets the pokemon's exp to next level in the given slot
     - %pixelmon_party_slot_1_name% - Gets the pokemon's name in the given slot

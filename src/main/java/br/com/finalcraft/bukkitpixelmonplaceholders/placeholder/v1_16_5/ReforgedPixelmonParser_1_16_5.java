@@ -17,6 +17,7 @@ import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.api.util.helpers.SpriteItemHelper;
 import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.attacks.specialAttacks.basic.HiddenPower;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 
 import java.text.DecimalFormat;
@@ -68,6 +69,14 @@ public class ReforgedPixelmonParser_1_16_5 {
                 "level",
                 "Pokemon's Level",
                 pokemon -> pokemon.getPokemonLevel()
+        );
+
+        POKEMON_REPLACER.addParser(
+                "pokedex_number",
+                "Pokemon's Natinonal Index",
+                pokemon -> {
+                    return pokemon.getSpecies().getDex();
+                }
         );
 
         POKEMON_REPLACER.addParser(
@@ -332,9 +341,7 @@ public class ReforgedPixelmonParser_1_16_5 {
                 pokemon -> {
                     String texture = pokemon.getPalette() != null ? pokemon.getPalette().getTexture().toString() : "";
                     if (!texture.isEmpty()) {
-                        String firstChar = String.valueOf(texture.charAt(0)).toUpperCase();
-                        String subTexture = texture.substring(1);
-                        return firstChar + subTexture;
+                        return StringUtils.capitalize(texture);
                     }
                     return "N/A";
                 }
