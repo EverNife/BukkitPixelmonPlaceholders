@@ -15,6 +15,13 @@ This plugin requires:
 - [EverNifeCore](https://github.com/evernife/EverNifeCore)
 - [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)
 
+# How to Build this Project
+
+```
+ [1] gradlew buildRequiredSubprojects      #This will build sub projects and move them to the libs folder
+ [2] gradlew build
+```
+
 # Placeholders
 
 Command for testing the placeholders:

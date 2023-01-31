@@ -24,13 +24,6 @@ allprojects {
     repositories {
         flatDir {
             dirs 'libs'
-
-
-            // I don't know why, but the compiller will cry saying that the mapping lbiraries cannot be found
-            // when we try to compile a ''sub-project'' that depends on it.
-            // So we need to add the mapping libraries to the main project too, but do it directly!
-            // The fix bellow goes for Windows Only!
-            dirs "${System.properties['user.home']}/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.16.5-36.2.34_mapped_official_1.16.5/"
         }
         mavenCentral()
         maven {
@@ -49,7 +42,7 @@ allprojects {
         testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 
         //Annotations
-        implementation 'org.jetbrains:annotations:24.0.0'
+        compileOnly 'org.jetbrains:annotations:24.0.0'
 
         //Lombok
         compileOnly 'org.projectlombok:lombok:1.18.24'
@@ -73,9 +66,20 @@ buildscript {
 apply plugin: 'maven-publish'
 apply plugin: "com.github.johnrengelman.shadow"
 
+def dependencyFile = project.file("libs/v1_16_5-${version}.jar")
 dependencies {
     implementation project("pixelmon:commons")
-    implementation project("pixelmon:v1_16_5")
+
+    if (dependencyFile.exists()){
+        implementation name: "v1_16_5-${version}"
+    }
+}
+
+//Code to build sub projets separated from the main project, to keep Forge Mappings correct
+task buildRequiredSubprojects(type: Copy) {
+    dependsOn ":pixelmon:v1_16_5:build"
+    from "$rootDir/pixelmon/v1_16_5/build/libs/"
+    into "$rootDir/libs"
 }
 
 jar {
@@ -85,10 +89,6 @@ jar {
 
 shadowJar {
     archiveName = "${baseName}-${version}.${extension}"
-    dependencies {
-        include(project('pixelmon:commons'))
-        include(project('pixelmon:v1_16_5'))
-    }
 }
 
 publishing {
