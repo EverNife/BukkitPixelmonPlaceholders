@@ -8,10 +8,10 @@ import br.com.finalcraft.evernifecore.commands.finalcmd.annotations.FinalCMD;
 import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
 import br.com.finalcraft.evernifecore.fancytext.FancyText;
 import br.com.finalcraft.evernifecore.integration.placeholders.PAPIIntegration;
+import br.com.finalcraft.evernifecore.pageviwer.PageViewer;
 import br.com.finalcraft.evernifecore.placeholder.parser.SimpleParser;
 import br.com.finalcraft.evernifecore.util.FCColorUtil;
 import br.com.finalcraft.evernifecore.util.FCTextUtil;
-import br.com.finalcraft.evernifecore.util.pageviwer.PageViewer;
 import org.bukkit.entity.Player;
 
 import java.util.*;

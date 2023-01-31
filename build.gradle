@@ -1,3 +1,64 @@
+allprojects {
+    buildscript {
+        repositories {
+            maven { url = 'https://maven.minecraftforge.net/' }
+            jcenter()
+            mavenCentral()
+        }
+    }
+
+    apply plugin: 'java'
+
+    group 'br.com.finalcraft'
+    version '1.0.7'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    compileJava.options.encoding = 'UTF-8'
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+
+
+            // I don't know why, but the compiller will cry saying that the mapping lbiraries cannot be found
+            // when we try to compile a ''sub-project'' that depends on it.
+            // So we need to add the mapping libraries to the main project too, but do it directly!
+            // The fix bellow goes for Windows Only!
+            dirs "${System.properties['user.home']}/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.16.5-36.2.34_mapped_official_1.16.5/"
+        }
+        mavenCentral()
+        maven {
+            name = 'spigotmc-repo'
+            url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
+        }
+        maven {
+            url = "https://maven.petrus.dev/public"
+        }
+    }
+
+    dependencies {
+        compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
+        compileOnly "br.com.finalcraft:EverNifeCore:2.0.3"
+
+        testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+
+        //Annotations
+        implementation 'org.jetbrains:annotations:24.0.0'
+
+        //Lombok
+        compileOnly 'org.projectlombok:lombok:1.18.24'
+        annotationProcessor 'org.projectlombok:lombok:1.18.24'
+        testCompileOnly 'org.projectlombok:lombok:1.18.24'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    }
+}
+
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net/' }
@@ -5,56 +66,29 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.+', changing: true
+        classpath "com.github.jengelman.gradle.plugins:shadow:6.1.0"
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
-
-group 'br.com.finalcraft'
-version '1.0.6'
-
-minecraft {
-    mappings channel: 'official', version: '1.16.5'
-}
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-compileJava.options.encoding = 'UTF-8'
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-    mavenCentral()
-    maven {
-        name = 'spigotmc-repo'
-        url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
-    }
-    maven {
-        url = "https://maven.petrus.dev/public"
-    }
-}
+apply plugin: "com.github.johnrengelman.shadow"
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
+    implementation project("pixelmon:commons")
+    implementation project("pixelmon:v1_16_5")
+}
 
-    compile "br.com.finalcraft:EverNifeCore:2.0.3"
+jar {
+    enabled = false //Disable default jar, only shadow jar will be created
+    dependsOn(shadowJar { classifier = null })
+}
 
-    compile 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-
-    compileOnly name: "Pixelmon-1.16.5-9.1.0-universal-noAssets"
-
-    //Annotations
-    compile 'org.jetbrains:annotations:23.0.0'
+shadowJar {
+    archiveName = "${baseName}-${version}.${extension}"
+    dependencies {
+        include(project('pixelmon:commons'))
+        include(project('pixelmon:v1_16_5'))
+    }
 }
 
 publishing {

@@ -1,5 +1,6 @@
-package br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.v1_16_5;
+package br.com.finalcraft.bukkitpixelmonplaceholders.pixelmon.v1_16_5.reforged;
 
+import br.com.finalcraft.bukkitpixelmonplaceholders.pixelmon.common.PokemonWrapper;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.api.Flags;
@@ -32,7 +33,16 @@ import java.util.stream.Collectors;
 public class ReforgedPixelmonParser_1_16_5 {
 
     public static RegexReplacer<Pokemon> createPokemonReplacer(){
-        final RegexReplacer<Pokemon> POKEMON_REPLACER = new RegexReplacer<>();
+        final RegexReplacer<Pokemon> POKEMON_REPLACER = new RegexReplacer(){
+            @Override
+            public String apply(String text, Object object) {
+                if (object instanceof PokemonWrapper){
+                    object = ((PokemonWrapper) object).getPokemon();
+                }
+                return super.apply(text, object);
+            }
+        };
+
         final DecimalFormat PERCENTAGE = new DecimalFormat("#0.##");
 
         POKEMON_REPLACER.addParser(

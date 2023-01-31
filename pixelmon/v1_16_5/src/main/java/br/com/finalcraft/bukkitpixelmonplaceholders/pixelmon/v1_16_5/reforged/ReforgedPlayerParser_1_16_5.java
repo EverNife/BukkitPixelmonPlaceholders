@@ -1,5 +1,6 @@
-package br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.v1_16_5;
+package br.com.finalcraft.bukkitpixelmonplaceholders.pixelmon.v1_16_5.reforged;
 
+import br.com.finalcraft.bukkitpixelmonplaceholders.pixelmon.common.PokemonWrapper;
 import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Pokedex;
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class ReforgedPlayerParser_1_16_5 {
 
     public static RegexReplacer<IPlayerData> createMainReplacer(){
-        final RegexReplacer<IPlayerData> MAIN_REPLACER = new RegexReplacer<>();
+        final RegexReplacer<IPlayerData> MAIN_REPLACER = new RegexReplacer();
         final DecimalFormat PERCENTAGE = new DecimalFormat("#0.##");
 
         MAIN_REPLACER.addParser(
