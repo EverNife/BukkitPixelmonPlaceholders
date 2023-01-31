@@ -1,8 +1,10 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders;
 
 import br.com.finalcraft.bukkitpixelmonplaceholders.commands.CommandRegisterer;
+import br.com.finalcraft.bukkitpixelmonplaceholders.compat.CompatChecker;
 import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.PixelmonPlaceholders;
 import br.com.finalcraft.evernifecore.ecplugin.annotations.ECPlugin;
+import br.com.finalcraft.evernifecore.logger.ECLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,12 +16,10 @@ public class BukkitPixelmonPlaceholders extends JavaPlugin{
 
     public static BukkitPixelmonPlaceholders instance;
 
-    public static void info(String msg){
-        instance.getLogger().info("[Info] " + msg);
-    }
+    private final ECLogger ecLogger = new ECLogger(this);
 
-    public static void debug(String msg){
-        instance.getLogger().info("[Debug] " + msg);
+    public static ECLogger getLog() {
+        return instance.ecLogger;
     }
 
     @Override
@@ -29,9 +29,11 @@ public class BukkitPixelmonPlaceholders extends JavaPlugin{
         CommandRegisterer.registerCommands(this);
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
-            info("Hooking into PlaceholderAPI");
+            getLogger().info("Hooking into PlaceholderAPI");
             PixelmonPlaceholders.registerToPAPI();
         }
+
+        CompatChecker.checkForOtherPlugins();
     }
 
     @Override
