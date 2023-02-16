@@ -1,8 +1,8 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders.pixelmon.v1_16_5.reforged;
 
-import br.com.finalcraft.bukkitpixelmonplaceholders.pixelmon.common.PokemonWrapper;
 import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
+import br.com.finalcraft.evernifecore.time.FCTimeFrame;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Pokedex;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
@@ -154,6 +154,16 @@ public class ReforgedPlayerParser_1_16_5 {
                 "The seconds until the next Legendary Spawn",
                 player -> {
                     return TimeUnit.MILLISECONDS.toSeconds(PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis());
+                }
+        );
+
+        MAIN_REPLACER.addParser(
+                "next_legendary_formatted",
+                "The formatted time until the next Legendary Spawn",
+                player -> {
+                    return FCTimeFrame.of(
+                            PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis()
+                    );
                 }
         );
 
