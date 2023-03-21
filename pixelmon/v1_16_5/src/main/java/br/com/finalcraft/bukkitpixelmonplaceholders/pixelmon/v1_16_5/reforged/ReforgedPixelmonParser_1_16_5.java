@@ -347,13 +347,17 @@ public class ReforgedPixelmonParser_1_16_5 {
 
         POKEMON_REPLACER.addParser(
                 "texture",
-                "A Pokemon's Custom Texture",
+                "A Pokemon's Custom Texture path",
                 pokemon -> {
-                    String texture = pokemon.getPalette() != null ? pokemon.getPalette().getTexture().toString() : "";
-                    if (!texture.isEmpty()) {
-                        return StringUtils.capitalize(texture);
-                    }
-                    return "N/A";
+                    return pokemon.getPalette() != null ? pokemon.getPalette().getTexture().toString() : "";
+                }
+        );
+
+        POKEMON_REPLACER.addParser(
+                "pallet",
+                "A Pokemon's Pallet Name",
+                pokemon -> {
+                    return pokemon.getPalette() != null ? pokemon.getPalette().getName() : "";
                 }
         );
 
