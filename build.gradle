@@ -10,7 +10,7 @@ allprojects {
     apply plugin: 'java'
 
     group 'br.com.finalcraft'
-    version '1.0.7'
+    version '1.0.8'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
