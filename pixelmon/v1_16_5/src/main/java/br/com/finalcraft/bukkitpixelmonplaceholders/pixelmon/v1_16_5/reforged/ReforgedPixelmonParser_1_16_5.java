@@ -18,14 +18,12 @@ import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.api.util.helpers.SpriteItemHelper;
 import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.attacks.specialAttacks.basic.HiddenPower;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 //This class is an adaptaion of https://github.com/NickImpact/GTS-Pixelmon-Extension
@@ -225,17 +223,10 @@ public class ReforgedPixelmonParser_1_16_5 {
                 }
         );
 
-        Function<Pokemon, Object> getGrowth = pokemon -> pokemon.getGrowth().getLocalizedName();
         POKEMON_REPLACER.addParser(
-                "size",
+                new String[]{"growth", "size"},
                 "Pokemon's Growth",
-                getGrowth
-        );
-
-        POKEMON_REPLACER.addParser(
-                "growth",
-                "Pokemon's Growth",
-                getGrowth
+                pokemon -> pokemon.getGrowth().getLocalizedName()
         );
 
         POKEMON_REPLACER.addParser(
@@ -356,6 +347,14 @@ public class ReforgedPixelmonParser_1_16_5 {
         POKEMON_REPLACER.addParser(
                 "palette",
                 "A Pokemon's Palette Name",
+                pokemon -> {
+                    return pokemon.getPalette() != null ? pokemon.getPalette().getLocalizedName() : "";
+                }
+        );
+
+        POKEMON_REPLACER.addParser(
+                "palette_unlocalized",
+                "A Pokemon's Palette Name Unlocalized",
                 pokemon -> {
                     return pokemon.getPalette() != null ? pokemon.getPalette().getName() : "";
                 }

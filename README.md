@@ -81,6 +81,7 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_held_item% - Gets the pokemon's Held Item
     - %pixelmon_party_slot_1_texture% - Gets the pokemon's Texture Path
     - %pixelmon_party_slot_1_palette% - Gets the pokemon's Palette Name
+    - %pixelmon_party_slot_1_palette_unlocalized% - Gets the pokemon's Palette Name Unlocalized
     - %pixelmon_party_slot_1_clones% - Gets the pokemon's Number of Mew Clones
     - %pixelmon_party_slot_1_enchantments% - Gets the pokemon's Number of Lake Trio Enchantments
     - %pixelmon_party_slot_1_hidden_power% - Gets the pokemon's Hidden Power
