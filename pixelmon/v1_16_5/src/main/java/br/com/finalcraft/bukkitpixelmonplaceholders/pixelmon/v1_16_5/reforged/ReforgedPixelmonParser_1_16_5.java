@@ -354,8 +354,8 @@ public class ReforgedPixelmonParser_1_16_5 {
         );
 
         POKEMON_REPLACER.addParser(
-                "pallet",
-                "A Pokemon's Pallet Name",
+                "palette",
+                "A Pokemon's Palette Name",
                 pokemon -> {
                     return pokemon.getPalette() != null ? pokemon.getPalette().getName() : "";
                 }
