@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class CMDCoreCommand {
 
     @FinalCMD.SubCMD(
-            subcmd = {"test"},
+            subcmd = {"list","test"},
             permission = PermissionNodes.COMMAND_TEST
     )
     public void test(Player player, PlayerData playerData, @Arg(name = "[page]", context = "[1:*]") Integer page){
