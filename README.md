@@ -65,6 +65,8 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_shiny_special% - Gets the pokemon's shiny status in the given slot with a colored String.
     - %pixelmon_party_slot_1_is_egg% - Gets if the pokemon is an egg (true/false);
     - %pixelmon_party_slot_1_is_non_egg% - Gets if the pokemon is not an egg (true/false);
+    - %pixelmon_party_slot_1_egg_steps% - Gets the eggs's Amount of steps remaining
+    - %pixelmon_party_slot_1_egg_groups% - Gets the eggs's Group's names.
     - %pixelmon_party_slot_1_is_legendary% - Gets if the pokemon is legendary;
     - %pixelmon_party_slot_1_is_legendary_special% - Gets if the pokemon is legendary with a colored String.
     - %pixelmon_party_slot_1_originaltrainer_name% - Gets the pokemon's Original Trainer Name
@@ -85,7 +87,6 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_clones% - Gets the pokemon's Number of Mew Clones
     - %pixelmon_party_slot_1_enchantments% - Gets the pokemon's Number of Lake Trio Enchantments
     - %pixelmon_party_slot_1_hidden_power% - Gets the pokemon's Hidden Power
-    - %pixelmon_party_slot_1_egg_steps% - Gets the pokemon's Amount of steps remaining for an egg
     - %pixelmon_party_slot_1_can_gmax% - Gets the pokemon's G-Max Potential
     - %pixelmon_party_slot_1_sprite% - Gets the pokemon's Sprite's NBT
 

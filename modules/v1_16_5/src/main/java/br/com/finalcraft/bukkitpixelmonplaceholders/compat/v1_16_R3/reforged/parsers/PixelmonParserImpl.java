@@ -410,6 +410,20 @@ public class PixelmonParserImpl {
                 }
         );
 
+        POKEMON_REPLACER.addParser(
+                "egg_groups",
+                "Name of all groups of this egg",
+                pokemon -> {
+                    if(pokemon.isEgg()) {
+                        return pokemon.getForm().getEggGroups().stream()
+                                .map(eggGroup -> eggGroup.getLocalizedName())
+                                .collect(Collectors.toList());
+                    }
+
+                    return "";
+                }
+        );
+
         for(int i = 0; i < 4; i++) {
             final int index = i;
             POKEMON_REPLACER.addParser(
