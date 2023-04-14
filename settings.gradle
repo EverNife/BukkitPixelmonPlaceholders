@@ -1,5 +1,3 @@
 rootProject.name = 'BukkitPixelmonPlaceholders'
 
-include 'pixelmon:commons'
-include 'pixelmon:v1_12_2'
-include 'pixelmon:v1_16_5'
+include 'modules:Commons'

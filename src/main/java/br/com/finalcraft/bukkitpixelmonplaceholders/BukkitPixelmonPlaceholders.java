@@ -1,7 +1,7 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders;
 
 import br.com.finalcraft.bukkitpixelmonplaceholders.commands.CommandRegisterer;
-import br.com.finalcraft.bukkitpixelmonplaceholders.compat.CompatChecker;
+import br.com.finalcraft.bukkitpixelmonplaceholders.integration.ExternalCompatibilityChecker;
 import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.PixelmonPlaceholders;
 import br.com.finalcraft.evernifecore.ecplugin.annotations.ECPlugin;
 import br.com.finalcraft.evernifecore.logger.ECLogger;
@@ -33,7 +33,7 @@ public class BukkitPixelmonPlaceholders extends JavaPlugin{
             PixelmonPlaceholders.registerToPAPI();
         }
 
-        CompatChecker.checkForOtherPlugins();
+        ExternalCompatibilityChecker.checkForOtherPlugins();
     }
 
     @Override
