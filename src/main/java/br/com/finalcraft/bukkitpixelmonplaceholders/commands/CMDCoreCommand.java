@@ -1,17 +1,20 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders.commands;
 
+import br.com.finalcraft.bukkitpixelmonplaceholders.BukkitPixelmonPlaceholders;
 import br.com.finalcraft.bukkitpixelmonplaceholders.PermissionNodes;
 import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.PixelmonPlaceholders;
 import br.com.finalcraft.evernifecore.commands.finalcmd.annotations.Arg;
 import br.com.finalcraft.evernifecore.commands.finalcmd.annotations.CMDHelpType;
 import br.com.finalcraft.evernifecore.commands.finalcmd.annotations.FinalCMD;
 import br.com.finalcraft.evernifecore.config.playerdata.PlayerData;
+import br.com.finalcraft.evernifecore.ecplugin.ECPluginManager;
 import br.com.finalcraft.evernifecore.fancytext.FancyText;
 import br.com.finalcraft.evernifecore.integration.placeholders.PAPIIntegration;
 import br.com.finalcraft.evernifecore.pageviwer.PageViewer;
 import br.com.finalcraft.evernifecore.placeholder.parser.SimpleParser;
 import br.com.finalcraft.evernifecore.util.FCColorUtil;
 import br.com.finalcraft.evernifecore.util.FCTextUtil;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -93,6 +96,15 @@ public class CMDCoreCommand {
                 .build();
         
         ALL_PLACEHOLDERS.send(page, player);
+    }
+
+    @FinalCMD.SubCMD(
+            subcmd = {"reload"},
+            permission = PermissionNodes.COMMAND_RELOAD,
+            desc = "Reloads the plugin!"
+    )
+    public void reload(CommandSender sender) {
+        ECPluginManager.reloadPlugin(sender, BukkitPixelmonPlaceholders.instance);
     }
 
 }

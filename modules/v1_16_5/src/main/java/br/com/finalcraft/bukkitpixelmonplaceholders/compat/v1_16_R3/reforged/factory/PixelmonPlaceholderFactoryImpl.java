@@ -1,6 +1,7 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_16_R3.reforged.factory;
 
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.factory.PixelmonPlaceholderFactory;
+import br.com.finalcraft.bukkitpixelmonplaceholders.common.settings.BPPSettings;
 import br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_16_R3.reforged.parsers.PixelmonParserImpl;
 import br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_16_R3.reforged.parsers.PlayerParserImpl;
 import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
@@ -38,6 +39,9 @@ public class PixelmonPlaceholderFactoryImpl extends PixelmonPlaceholderFactory<P
                 try {
                     return pokemonRContext.quoteAndParse(null, pokemonPlaceholder);
                 }catch (Exception e){
+                    if (pokemon == null){
+                        return BPPSettings.DEFAULT_PLACEHOLDER_WHEN_NO_POKEMON;
+                    }
                     return ""; //Empty String when there is a Pokemon Dependent Placeholder
                 }
             }
