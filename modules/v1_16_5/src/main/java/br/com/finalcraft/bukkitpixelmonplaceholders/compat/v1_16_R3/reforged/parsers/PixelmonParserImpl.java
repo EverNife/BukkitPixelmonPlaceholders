@@ -114,7 +114,7 @@ public class PixelmonParserImpl {
                 "Pokemon's Form Unlocalized Name",
                 pokemon -> {
                     return Optional.ofNullable(pokemon.getForm())
-                            .map(form -> form.getLocalizedName())
+                            .map(form -> form.getTranslationKey())
                             .orElse("N/A");
                 }
         );
