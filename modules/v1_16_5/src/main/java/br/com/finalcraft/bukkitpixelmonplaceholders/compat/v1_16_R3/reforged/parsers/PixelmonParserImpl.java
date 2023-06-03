@@ -110,6 +110,16 @@ public class PixelmonParserImpl {
         );
 
         POKEMON_REPLACER.addParser(
+                "form_unlocalized",
+                "Pokemon's Form Unlocalized Name",
+                pokemon -> {
+                    return Optional.ofNullable(pokemon.getForm())
+                            .map(form -> form.getLocalizedName())
+                            .orElse("N/A");
+                }
+        );
+
+        POKEMON_REPLACER.addParser(
                 "shiny",
                 "Pokemon Shiny State",
                 pokemon -> pokemon.isShiny()

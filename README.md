@@ -61,6 +61,7 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_species% - Gets the pokemon's species
     - %pixelmon_party_slot_1_level% - Gets the pokemon's level in the given slot
     - %pixelmon_party_slot_1_form% - Gets the pokemon's form in the given slot
+    - %pixelmon_party_slot_1_form_unlocalized% - Gets the pokemon's unlocalized form in the given slot
     - %pixelmon_party_slot_1_shiny% - Gets the pokemon's shiny status in the given slot
     - %pixelmon_party_slot_1_shiny_special% - Gets the pokemon's shiny status in the given slot with a colored String.
     - %pixelmon_party_slot_1_is_egg% - Gets if the pokemon is an egg (true/false);
