@@ -7,6 +7,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.species.Pokedex;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.spawning.PixelmonSpawning;
+import com.pixelmonmod.pixelmon.storage.playerData.CaptureCombo;
 
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
@@ -167,6 +168,44 @@ public class PlayerParserImpl {
                 }
         );
 
+        MAIN_REPLACER.addParser(
+                "catchcombo_amount",
+                "Player's CatchCombo's Amount",
+                player -> {
+                    PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+                    CaptureCombo combo = party.transientData.captureCombo;
+                    if (combo == null){
+                        return 0;
+                    }
+                    return combo.getCurrentCombo();
+                }
+        );
+
+        MAIN_REPLACER.addParser(
+                "catchcombo_species",
+                "Player's CatchCombo's Species Name",
+                player -> {
+                    PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+                    CaptureCombo combo = party.transientData.captureCombo;
+                    if (combo == null || combo.getCurrentSpecies() == null){
+                        return "";
+                    }
+                    return combo.getCurrentSpecies();
+                }
+        );
+
+        MAIN_REPLACER.addParser(
+                "catchcombo_species_localized",
+                "Player's CatchCombo's Species LocalizedName",
+                player -> {
+                    PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+                    CaptureCombo combo = party.transientData.captureCombo;
+                    if (combo == null || combo.getCurrentSpecies() == null){
+                        return "";
+                    }
+                    return combo.getCurrentSpecies().getLocalizedName();
+                }
+        );
 
         return MAIN_REPLACER;
     }
