@@ -462,6 +462,18 @@ public class PixelmonParserImpl {
                 pokemon -> SpriteItemHelper.getPhoto(pokemon).getTag().toString()
         );
 
+        POKEMON_REPLACER.addParser(
+                "friendship",
+                "Pokemon's Friendship",
+                pokemon -> pokemon.getFriendship()
+        );
+
+        POKEMON_REPLACER.addParser(
+                "friendship_percentage",
+                "Pokemon's Friendship Percentage",
+                pokemon -> PERCENTAGE.format(pokemon.getFriendship() / 255D * 100D) + "%"
+        );
+
         return POKEMON_REPLACER;
     }
 

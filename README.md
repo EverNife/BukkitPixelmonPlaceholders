@@ -93,6 +93,8 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_hidden_power% - Gets the pokemon's Hidden Power
     - %pixelmon_party_slot_1_can_gmax% - Gets the pokemon's G-Max Potential
     - %pixelmon_party_slot_1_sprite% - Gets the pokemon's Sprite's NBT
+    - %pixelmon_party_slot_1_friendship% - Gets the pokemon's Friendship Number (0-255)
+    - %pixelmon_party_slot_1_friendship_percentage% - Gets the pokemon's Friendship Percentage (0%-100%)
 
 
 - EVS Stats
