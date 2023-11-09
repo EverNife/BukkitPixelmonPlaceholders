@@ -1,9 +1,9 @@
-package br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_20_R1.reforged.factory;
+package br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_20_R2.reforged.factory;
 
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.factory.PixelmonPlaceholderFactory;
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.settings.BPPSettings;
-import br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_20_R1.reforged.parsers.PixelmonParserImpl;
-import br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_20_R1.reforged.parsers.PlayerParserImpl;
+import br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_20_R2.reforged.parsers.PixelmonParserImpl;
+import br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_20_R2.reforged.parsers.PlayerParserImpl;
 import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import br.com.finalcraft.evernifecore.util.FCInputReader;

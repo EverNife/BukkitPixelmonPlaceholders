@@ -1,4 +1,4 @@
-package br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_20_R1.reforged.parsers;
+package br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_20_R2.reforged.parsers;
 
 import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
