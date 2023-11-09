@@ -1,14 +1,18 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders.common;
 
-import lombok.Data;
+public class PokemonWrapper<P> {
 
-@Data
-public class PokemonWrapper {
+    private final P pokemon;
 
-    private final Object pokemon;
+    public PokemonWrapper(P pokemon) {
+        this.pokemon = pokemon;
+    }
 
-    public static PokemonWrapper of(Object pokemon){
+    public static <P> PokemonWrapper<P> of(P pokemon){
         return new PokemonWrapper(pokemon);
     }
 
+    public P getPokemon() {
+        return pokemon;
+    }
 }
