@@ -23,7 +23,6 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-
 repositories {
     flatDir { //Change this to where are your local libs
         dirs 'libs'
@@ -52,13 +51,15 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.24'
 }
 
+def projects = [
+        'modules/v1_12_2',
+        'modules/v1_16_5',
+        'modules/v1_20_2',
+]
+
 task buildAndMoveJars {
     doLast {
         // Define the projects to be built and moved
-        def projects = [
-                'modules/v1_16_5',
-                'modules/v1_20_2',
-        ]
 
         // List to store the paths of the built JAR files
         def jarFiles = []
@@ -109,6 +110,31 @@ clean{
         fileTree(dir: 'libs', include: '**/*-COMPAT.jar').each { file ->
             file.delete()
         }
+
+        projects.each { project ->
+
+            // Execute the Gradle build for the project
+            println("[PROJECT_COMPAT] Clean project: ${project}")
+
+            def gradlewBat = System.getProperty('os.name').toLowerCase().contains('windows')
+                    ? 'gradlew.bat'
+                    : 'gradlew'
+
+            def cleanResult = exec {
+                // Use the Gradle Wrapper in the project directory
+                workingDir project
+                commandLine gradlewBat, 'clean'
+            }
+
+            // Check if the build was successful
+            if (cleanResult.exitValue == 0) {
+                println("[PROJECT_COMPAT] Clean Completed")
+            } else {
+                // Print an error message if the build failed
+                println "Clean failed for project: $project"
+            }
+        }
+
     }
 }
 
