@@ -47,7 +47,7 @@ dependencies {
 
     compileOnly 'org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT'
     compileOnly "br.com.finalcraft:EverNifeCore:2.0.3"
-    compileOnly name: "Pixelmon-1.20.2-9.2.4-universal-noAssets"
+    compileOnly name: "Pixelmon-1.20.2-9.2.5-universal-noAssets"
 
     compileOnly project('Commons')
 

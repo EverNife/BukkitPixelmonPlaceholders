@@ -403,7 +403,7 @@ public class PixelmonParserImpl {
         POKEMON_REPLACER.addParser(
                 "hidden_power",
                 "A Pokemon's Hidden Power",
-                pokemon -> HiddenPower.getHiddenPowerType(null, pokemon, pokemon.getIVs(), "PlaceholderAPI")
+                pokemon -> HiddenPower.getHiddenPowerType(pokemon.getIVs())
         );
 
         POKEMON_REPLACER.addParser(
