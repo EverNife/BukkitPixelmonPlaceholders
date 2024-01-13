@@ -46,6 +46,7 @@ Player Info
     - %pixelmon_lowest_level% - Gets the player's party's lowest level
     - %pixelmon_highest_level% - Gets the player's party's highest level
     - %pixelmon_next_legendary% - Gets the next legendary spawn time in seconds
+    - %pixelmon_next_legendary_minutes% - Gets the next legendary spawn time in seconds
     - %pixelmon_next_legendary_formatted% - Gets the next legendary spawn time formatted
     - %pixelmon_catchcombo_amount% - Gets the player's CatchCombo's Amount
     - %pixelmon_catchcombo_species% - Gets the player's CatchCombo's Species Name

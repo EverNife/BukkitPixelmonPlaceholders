@@ -159,6 +159,14 @@ public class PlayerParserImpl {
         );
 
         MAIN_REPLACER.addParser(
+                "next_legendary_minutes",
+                "The minutes until the next Legendary Spawn",
+                player -> {
+                    return TimeUnit.MILLISECONDS.toMinutes(PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis());
+                }
+        );
+
+        MAIN_REPLACER.addParser(
                 "next_legendary_formatted",
                 "The formatted time until the next Legendary Spawn",
                 player -> {
