@@ -13,7 +13,7 @@ apply plugin: 'maven-publish'
 apply plugin: "com.github.johnrengelman.shadow"
 
 group 'br.com.finalcraft'
-version '1.2.1'
+version '1.2.2'
 
 targetCompatibility = 1.8
 sourceCompatibility = 1.8
@@ -52,7 +52,7 @@ dependencies {
 }
 
 def projects = [
-        'modules/v1_12_2',
+//        'modules/v1_12_2',
         'modules/v1_16_5',
         'modules/v1_20_2',
 ]
