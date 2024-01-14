@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'com.anatawa12.forge:ForgeGradle:2.3-1.0.+'
     }
 }
 
@@ -29,6 +29,7 @@ repositories {
         dirs 'libs'
     }
     mavenCentral()
+    jcenter()
     maven {
         name = 'spigotmc-repo'
         url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
@@ -48,8 +49,9 @@ minecraft {
 }
 
 dependencies {
-    compileOnly 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
     compileOnly "br.com.finalcraft:EverNifeCore:2.0.3"
+
     compileOnly name: "Pixelmon-1.12.2-8.4.3-noassets"
 
     compileOnly project('Commons')

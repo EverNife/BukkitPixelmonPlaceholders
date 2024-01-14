@@ -52,7 +52,7 @@ dependencies {
 }
 
 def projects = [
-//        'modules/v1_12_2',
+        'modules/v1_12_2',
         'modules/v1_16_5',
         'modules/v1_20_2',
 ]
