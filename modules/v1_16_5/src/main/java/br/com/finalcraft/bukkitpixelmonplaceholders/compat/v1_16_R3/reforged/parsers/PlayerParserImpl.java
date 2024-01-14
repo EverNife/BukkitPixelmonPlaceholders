@@ -154,7 +154,7 @@ public class PlayerParserImpl {
                 "next_legendary",
                 "The seconds until the next Legendary Spawn",
                 player -> {
-                    return TimeUnit.MILLISECONDS.toMinutes(PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis());
+                    return TimeUnit.MILLISECONDS.toSeconds(PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis());
                 }
         );
 
@@ -162,7 +162,7 @@ public class PlayerParserImpl {
                 "next_legendary_minutes",
                 "The minutes until the next Legendary Spawn",
                 player -> {
-                    return TimeUnit.MILLISECONDS.toSeconds(PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis());
+                    return TimeUnit.MILLISECONDS.toMinutes(PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis());
                 }
         );
 
