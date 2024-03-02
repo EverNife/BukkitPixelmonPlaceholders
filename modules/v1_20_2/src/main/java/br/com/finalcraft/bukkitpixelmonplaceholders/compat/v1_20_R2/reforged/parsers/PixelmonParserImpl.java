@@ -150,6 +150,23 @@ public class PixelmonParserImpl {
         );
 
         POKEMON_REPLACER.addParser(
+                "is_ultrabeast",
+                "Pokemon Ultrabeast State",
+                pokemon -> pokemon.isUltraBeast()
+        );
+
+        POKEMON_REPLACER.addParser(
+                "is_ultrabeast_special",
+                "A Preformatted Representation of Ultrabeast State",
+                pokemon -> {
+                    if(pokemon.isUltraBeast()) {
+                        return ChatColor.GRAY + "(" + ChatColor.LIGHT_PURPLE + "Ultrabeast" + ChatColor.GRAY + ")";
+                    }
+                    return "";
+                }
+        );
+
+        POKEMON_REPLACER.addParser(
                 "is_legendary",
                 "Pokemon Legendary State",
                 pokemon -> pokemon.isLegendary()
@@ -160,7 +177,7 @@ public class PixelmonParserImpl {
                 "A Preformatted Representation of Legendary State",
                 pokemon -> {
                     if(pokemon.isLegendary()) {
-                        return ChatColor.GRAY + "(" + ChatColor.GOLD + "Shiny" + ChatColor.GRAY + ")";
+                        return ChatColor.GRAY + "(" + ChatColor.GOLD + "Legendary" + ChatColor.GRAY + ")";
                     }
                     return "";
                 }

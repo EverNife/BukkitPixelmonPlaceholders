@@ -72,6 +72,8 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_is_non_egg% - Gets if the pokemon is not an egg (true/false);
     - %pixelmon_party_slot_1_egg_steps% - Gets the eggs's Amount of steps remaining
     - %pixelmon_party_slot_1_egg_groups% - Gets the eggs's Group's names.
+    - %pixelmon_party_slot_1_is_ultrabeast% - Gets if the pokemon is ultrabeast;
+    - %pixelmon_party_slot_1_is_ultrabeast_special% - Gets if the pokemon is ultrabeast with a colored String.
     - %pixelmon_party_slot_1_is_legendary% - Gets if the pokemon is legendary;
     - %pixelmon_party_slot_1_is_legendary_special% - Gets if the pokemon is legendary with a colored String.
     - %pixelmon_party_slot_1_originaltrainer_name% - Gets the pokemon's Original Trainer Name
