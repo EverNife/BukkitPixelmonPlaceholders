@@ -44,6 +44,12 @@ public class PixelmonParserImpl {
         final DecimalFormat PERCENTAGE = new DecimalFormat("#0.##");
 
         POKEMON_REPLACER.addParser(
+                "is_present",
+                "Check if pokemon is present on the slot!",
+                pokemon -> pokemon != null
+        );
+
+        POKEMON_REPLACER.addParser(
                 "originaltrainer_name",
                 "Pokemon's original trainer name",
                 pokemon -> pokemon.getOriginalTrainer()
