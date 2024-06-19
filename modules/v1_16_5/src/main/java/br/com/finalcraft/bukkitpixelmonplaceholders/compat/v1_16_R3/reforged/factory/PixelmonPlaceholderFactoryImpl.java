@@ -25,7 +25,7 @@ public class PixelmonPlaceholderFactoryImpl extends PixelmonPlaceholderFactory<P
             Integer slot = FCInputReader.parseInt(pokemonRContext.getString("{slotNumber}"));
 
             if (slot == null || !NumberWrapper.of(slot).isBounded(1,6)){
-                return "[Invalid Party Slot Number]";
+                return "[Invalid Party Slot Number] Received '" + slot + "' as PartySlot";
             }
 
             String pokemonPlaceholder = pokemonRContext.getString("{pokemonPlaceholder}");
