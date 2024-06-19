@@ -98,7 +98,7 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_sprite% - Gets the pokemon's Sprite's NBT
     - %pixelmon_party_slot_1_friendship% - Gets the pokemon's Friendship Number (0-255)
     - %pixelmon_party_slot_1_friendship_percentage% - Gets the pokemon's Friendship Percentage (0%-100%)
-
+    - %pixelmon_party_slot_1_specflag_contains_{flagName}% - Gets if the pokemon has a specific specflag ('true' | 'false')
 
 - EVS Stats
     - %pixelmon_party_slot_1_ev_total% - Gets the pokemon's evs total value

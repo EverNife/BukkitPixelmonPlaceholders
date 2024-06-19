@@ -492,6 +492,11 @@ public class PixelmonParserImpl {
                 pokemon -> PERCENTAGE.format(pokemon.getFriendship() / 255D * 100D) + "%"
         );
 
+        POKEMON_REPLACER.addManipulator("specflag_contains_{flagName}", (pokemon, pokemonRContext) -> {
+            String flagName = pokemonRContext.getString("{flagName}");
+            return pokemon.hasFlag(flagName);
+        });
+
         return POKEMON_REPLACER;
     }
 
