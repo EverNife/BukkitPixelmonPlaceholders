@@ -12,6 +12,11 @@ import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.storage.PartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 
+import javax.swing.text.html.Option;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class PixelmonPlaceholderFactoryImpl extends PixelmonPlaceholderFactory<Pokemon> {
 
     public RegexReplacer<IPlayerData> MAIN_REPLACER;
@@ -25,7 +30,16 @@ public class PixelmonPlaceholderFactoryImpl extends PixelmonPlaceholderFactory<P
             Integer slot = FCInputReader.parseInt(pokemonRContext.getString("{slotNumber}"));
 
             if (slot == null || !NumberWrapper.of(slot).isBounded(1,6)){
-                return "[Invalid Party Slot Number] Received '" + pokemonRContext.getString("{slotNumber}") + "' as PartySlot";
+                String slotNumber = pokemonRContext.getString("{slotNumber}");
+
+                List<String> charsCodes = new ArrayList<>();
+                if (slotNumber != null){
+                    for (char c : slotNumber.toCharArray()) {
+                        charsCodes.add(String.format("'%s' -> '%s'", c, (int) c));
+                    }
+                }
+
+                return "[Invalid Party Slot Number] Received '" + slotNumber + "' as PartySlot with codes: " + charsCodes.stream().collect(Collectors.joining(" | "));
             }
 
             String pokemonPlaceholder = pokemonRContext.getString("{pokemonPlaceholder}");
