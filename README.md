@@ -18,8 +18,7 @@ This plugin requires:
 # How to Build this Project
 
 ```
- [1] gradlew buildRequiredSubprojects      #This will build sub projects and move them to the libs folder
- [2] gradlew build
+ gradlew build
 ```
 
 # Placeholders
