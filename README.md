@@ -27,6 +27,10 @@ Command for testing the placeholders:
 > **/bpp test** _(permission: bukkitpixelmonplaceholders.command.test)_
 ![bpp-test-command.png](bpp-test-command.png)
 
+For notice, some placeholders has collors!
+To remove a color from any placeholder, prefix the placeholder with %pixelmon_uncolorfy
+
+Ex: **%pixelmon_party_slot_1_gender%** will be **%pixelmon_uncolorfy_party_slot_1_gender%**
 
 Player Info
 - Generic
