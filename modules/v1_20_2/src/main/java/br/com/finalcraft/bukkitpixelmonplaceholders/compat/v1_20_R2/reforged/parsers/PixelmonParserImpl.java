@@ -112,7 +112,7 @@ public class PixelmonParserImpl {
                 pokemon -> {
                     return Optional.ofNullable(pokemon.getForm())
                             .map(form -> form.getLocalizedName())
-                            .orElse("N/A");
+                            .orElse("");
                 }
         );
 
@@ -122,7 +122,7 @@ public class PixelmonParserImpl {
                 pokemon -> {
                     return Optional.ofNullable(pokemon.getForm())
                             .map(form -> form.getTranslationKey())
-                            .orElse("N/A");
+                            .orElse("");
                 }
         );
 
