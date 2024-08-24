@@ -374,7 +374,7 @@ public class PixelmonParserImpl {
                 "texture",
                 "A Pokemon's Custom Texture path",
                 pokemon -> {
-                    return pokemon.getPalette() != null ? pokemon.getPalette().getTexture().toString() : "";
+                    return pokemon.getPalette() != null ? pokemon.getPalette().getSprite().toString() : "";
                 }
         );
 
