@@ -11,8 +11,8 @@ public abstract class PixelmonPlaceholderFactory<POKEMON> {
     public static PixelmonPlaceholderFactory<?> create(){
 
         String versionName = MCVersion.getCurrent().name();
-        if (MCVersion.isEqual(MCVersion.v1_12)){
-            versionName = MCDetailedVersion.v1_12_R2.name();
+        if (MCVersion.isEqual(MCVersion.v1_20)){
+            versionName = MCDetailedVersion.v1_20_R2.name();
         }
 
         PixelmonPlaceholderFactory<?> factory = (PixelmonPlaceholderFactory<?>) FCReflectionUtil.getConstructor(
