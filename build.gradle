@@ -41,7 +41,7 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
-    compileOnly "br.com.finalcraft:EverNifeCore:2.0.3"
+    compileOnly "br.com.finalcraft:EverNifeCore:2.0.4"
 
     implementation project(':modules:Commons')
 
