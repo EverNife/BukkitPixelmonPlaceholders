@@ -37,4 +37,12 @@ public class RemapperData implements FConfigComplex {
         //TODO create custom remap functions like per-interval or whatever
         return valueParsed;
     }
+
+    @Override
+    public String toString() {
+        return "RemapperData{" +
+                "key='" + key + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }
