@@ -10,10 +10,9 @@ public abstract class PixelmonPlaceholderFactory<POKEMON> {
 
     public static PixelmonPlaceholderFactory<?> create(){
 
-        String versionName = MCVersion.getCurrent().name();
-        if (MCVersion.isEqual(MCVersion.v1_20)){
-            versionName = MCDetailedVersion.v1_20_R2.name();
-        }
+        String versionName = MCVersion.isEqual(MCVersion.v1_20)
+                ? MCDetailedVersion.v1_20_R2.name() //Enforce 1.20.2 path when in 1.20.x
+                : MCVersion.getCurrent().name();
 
         PixelmonPlaceholderFactory<?> factory = (PixelmonPlaceholderFactory<?>) FCReflectionUtil.getConstructor(
                 "br.com.finalcraft.bukkitpixelmonplaceholders.compat." + versionName +".reforged.factory.PixelmonPlaceholderFactoryImpl"
