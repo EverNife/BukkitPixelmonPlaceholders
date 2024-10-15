@@ -96,11 +96,19 @@ public class PlaceholderRemapper {
 
         if (ecLogger.getEcPluginData().isDebugEnabled()){
             NORMAL_REMAPS.forEach((key, value) -> {
-                ecLogger.debug("NormalRemaps: " + key + " -> " + value.entrySet().stream().map(entry -> entry.getKey() + " -> " + entry.getValue()).reduce((a,b) -> a + "\n" + b).orElse("Empty"));
+                ecLogger.debug("NormalRemaps: " + key + ": " +
+                        "\n    " + value.entrySet().stream().map(entry -> entry.getKey() + " -> " + entry.getValue())
+                        .reduce((a,b) -> a + "\n    " + b)
+                        .orElse("Empty")
+                );
             });
 
             POKEMON_SPECIFIC_REMAPS.forEach((key, value) -> {
-                ecLogger.debug("PokemonSpecificRemaps: " + key + " -> " + value.entrySet().stream().map(entry -> entry.getKey() + " -> " + entry.getValue()).reduce((a,b) -> a + "\n" + b).orElse("Empty"));
+                ecLogger.debug("PokemonSpecificRemaps: " + key + ": " +
+                        "\n    " + value.entrySet().stream().map(entry -> entry.getKey() + " -> " + entry.getValue())
+                        .reduce((a,b) -> a + "\n    " + b)
+                        .orElse("Empty")
+                );
             });
         }
 
