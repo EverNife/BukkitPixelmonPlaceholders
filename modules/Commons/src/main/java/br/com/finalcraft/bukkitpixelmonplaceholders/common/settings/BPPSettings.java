@@ -1,13 +1,14 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders.common.settings;
 
 import br.com.finalcraft.evernifecore.config.Config;
+import br.com.finalcraft.evernifecore.logger.ECLogger;
 
 public class BPPSettings {
 
     public static String BPP_PLACEHOLDER_PREFIX = "pixelmon";
     public static String DEFAULT_PLACEHOLDER_WHEN_NO_POKEMON = "";
 
-    public static void initialize(Config config){
+    public static void initialize(ECLogger ecLogger, Config config){
         BPP_PLACEHOLDER_PREFIX = config.getOrSetDefaultValue(
                 "Settings.PAPIPlaceholderPrefix",
                 "pixelmon",
@@ -29,6 +30,8 @@ public class BPPSettings {
                         "\nThis option is here because some players use DeluxeMenus and it" +
                         "\ndoes not behave well with empty placeholders!"
         );
+
+        ecLogger.getEcPluginData().isDebugEnabled();
 
         config.saveIfNewDefaults();
     }
