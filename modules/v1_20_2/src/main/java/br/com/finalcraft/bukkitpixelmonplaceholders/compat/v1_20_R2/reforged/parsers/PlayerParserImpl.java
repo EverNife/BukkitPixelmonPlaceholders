@@ -1,5 +1,7 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_20_R2.reforged.parsers;
 
+import br.com.finalcraft.bukkitpixelmonplaceholders.common.placeholderremapper.PlaceholderRemapper;
+import br.com.finalcraft.bukkitpixelmonplaceholders.common.regexreplacer.RemappableRegexReplacer;
 import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import br.com.finalcraft.evernifecore.time.FCTimeFrame;
@@ -16,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class PlayerParserImpl {
 
     public static RegexReplacer<IPlayerData> createMainReplacer(){
-        final RegexReplacer<IPlayerData> MAIN_REPLACER = new RegexReplacer();
+        final RemappableRegexReplacer<IPlayerData> MAIN_REPLACER = new RemappableRegexReplacer(PlaceholderRemapper.RemapType.NORMAL);
         final DecimalFormat PERCENTAGE = new DecimalFormat("#0.##");
 
         MAIN_REPLACER.addParser(
