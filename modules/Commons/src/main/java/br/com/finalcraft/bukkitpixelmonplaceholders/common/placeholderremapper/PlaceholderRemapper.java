@@ -71,7 +71,7 @@ public class PlaceholderRemapper {
             remapperDataList.forEach(remapperData -> {
                 remapperDataMap.put(remapperData.getKey(), remapperData);
             });
-            NORMAL_REMAPS.put(placeholderName.substring("%pixelmon_".length() + 1, placeholderName.length() - 1), remapperDataMap);
+            NORMAL_REMAPS.put(placeholderName.substring("%pixelmon_".length(), placeholderName.length() - 1), remapperDataMap);
         });
 
 
