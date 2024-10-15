@@ -1,6 +1,8 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_16_R3.reforged.parsers;
 
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.PokemonWrapper;
+import br.com.finalcraft.bukkitpixelmonplaceholders.common.placeholderremapper.PlaceholderRemapper;
+import br.com.finalcraft.bukkitpixelmonplaceholders.common.regexreplacer.RemappableRegexReplacer;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.api.Flags;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
 public class PixelmonParserImpl {
 
     public static RegexReplacer<Pokemon> createPokemonReplacer(){
-        final RegexReplacer<Pokemon> POKEMON_REPLACER = new RegexReplacer(){
+        final RemappableRegexReplacer<Pokemon> POKEMON_REPLACER = new RemappableRegexReplacer(PlaceholderRemapper.RemapType.POKEMON_SPECIFIC) {
             @Override
             public String apply(String text, Object object) {
                 if (object instanceof PokemonWrapper){
