@@ -127,6 +127,9 @@ public class PlaceholderRemapper {
                 ? NORMAL_REMAPS.get(replacerName)
                 : POKEMON_SPECIFIC_REMAPS.get(replacerName);
 
+//        System.out.println("Getting Remapper for: " + replacerName + " - " + remapType);
+//        System.out.println("ResultMap: " + (resultMap == null ? new HashMap<>() : resultMap).entrySet().stream().map(entry -> entry.getKey() + " -> " + entry.getValue()).reduce((a,b) -> a + "\n" + b).orElse("Empty"));
+
         if (resultMap == null){
             return initialResult -> {
                 RemapperData remapperData = GLOBAL_REMAPPER.get(initialResult);
