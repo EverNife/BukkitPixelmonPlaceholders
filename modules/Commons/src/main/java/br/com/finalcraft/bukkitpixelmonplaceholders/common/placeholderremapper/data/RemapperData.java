@@ -1,12 +1,12 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders.common.placeholderremapper.data;
 
 import br.com.finalcraft.evernifecore.config.fcconfiguration.annotation.FConfig;
-import br.com.finalcraft.evernifecore.config.fcconfiguration.annotation.FConfigComplex;
+import br.com.finalcraft.evernifecore.config.fcconfiguration.annotation.IFConfigComplex;
 import br.com.finalcraft.evernifecore.config.yaml.section.ConfigSection;
 import br.com.finalcraft.evernifecore.util.FCColorUtil;
 
 @FConfig
-public class RemapperData implements FConfigComplex {
+public class RemapperData implements IFConfigComplex {
 
     @FConfig.Id
     private String key;
