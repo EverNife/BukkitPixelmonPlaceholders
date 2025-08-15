@@ -3,13 +3,17 @@ package br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_16_R3.reforged.pa
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.placeholderremapper.PlaceholderRemapper;
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.regexreplacer.RemappableRegexReplacer;
 import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
+import br.com.finalcraft.evernifecore.nms.util.NMSUtils;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import br.com.finalcraft.evernifecore.time.FCTimeFrame;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Pokedex;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
+import com.pixelmonmod.pixelmon.battles.BattleRegistry;
+import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.spawning.PixelmonSpawning;
 import com.pixelmonmod.pixelmon.storage.playerData.CaptureCombo;
+import net.minecraft.entity.player.PlayerEntity;
 
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
@@ -214,6 +218,47 @@ public class PlayerParserImpl {
                         return "";
                     }
                     return combo.getCurrentSpecies().getLocalizedName();
+                }
+        );
+
+        MAIN_REPLACER.addParser(
+                "is_in_battle",
+                "Player Is In Battle",
+                player -> {
+                    Object minecraftEntity = NMSUtils.get().asMinecraftEntity(player.getPlayer());
+                    PlayerEntity entityPlayer = (PlayerEntity) minecraftEntity;
+                    BattleController battle = BattleRegistry.getBattle(entityPlayer);
+                    return battle != null;
+                }
+        );
+
+        MAIN_REPLACER.addParser(
+                "is_in_battle_pvp",
+                "Player Is In a PVP Battle",
+                player -> {
+                    Object minecraftEntity = NMSUtils.get().asMinecraftEntity(player.getPlayer());
+                    PlayerEntity entityPlayer = (PlayerEntity) minecraftEntity;
+                    BattleController battle = BattleRegistry.getBattle(entityPlayer);
+                    if (battle == null){
+                        return false;
+                    }
+
+                    return battle.isPvP();
+                }
+        );
+
+        MAIN_REPLACER.addParser(
+                "is_in_battle_pve",
+                "Player Is In a PvE Battle",
+                player -> {
+                    Object minecraftEntity = NMSUtils.get().asMinecraftEntity(player.getPlayer());
+                    PlayerEntity entityPlayer = (PlayerEntity) minecraftEntity;
+                    BattleController battle = BattleRegistry.getBattle(entityPlayer);
+                    if (battle == null){
+                        return false;
+                    }
+
+                    return !battle.isPvP();
                 }
         );
 

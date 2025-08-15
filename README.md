@@ -54,6 +54,9 @@ Player Info
     - %pixelmon_catchcombo_amount% - Gets the player's CatchCombo's Amount
     - %pixelmon_catchcombo_species% - Gets the player's CatchCombo's Species Name
     - %pixelmon_catchcombo_species_localized% - Gets the player's CatchCombo's Species LocalizedName
+    - %pixelmon_is_in_battle% - Gets if the player is in a battle (true/false)
+    - %pixelmon_is_in_battle_pvp% - Gets if the player is in a battle against another player (true/false)
+    - %pixelmon_is_in_battle_pve% - Gets if the player is in a battle against a wild pokemon (true/false)
 
 
 
