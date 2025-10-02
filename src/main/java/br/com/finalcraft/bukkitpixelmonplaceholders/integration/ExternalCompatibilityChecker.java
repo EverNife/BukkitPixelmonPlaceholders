@@ -15,7 +15,7 @@ public class ExternalCompatibilityChecker {
                     if (FCReflectionUtil.isClassLoaded("me.neovitalism.pixelmonextension.PixelmonExtension")){
                         for (int i = 0; i < 6; i++) {
                             BukkitPixelmonPlaceholders.getLog().severe("It seems that you are using Neovitalism's PixelmonExtension at 'plugins/PlaceholderAPI/expansions/'! " +
-                                    "I suggest you change default's BukkitPixelmonPlaceholder's prefix from 'pixelmon' to something else at it's config to prevent incompatibility!!");
+                                    "I suggest you change default's BukkitPixelmonPlaceholder's prefix from 'pixelmon' to 'bpppixelmon' pr something else at 'plugins/BukkitPixelmonPlaceholders/config.yml' to prevent incompatibility!!");
                         }
                     }
                 }
