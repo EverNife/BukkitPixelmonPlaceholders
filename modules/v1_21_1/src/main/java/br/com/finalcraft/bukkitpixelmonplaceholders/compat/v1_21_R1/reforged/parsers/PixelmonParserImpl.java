@@ -20,6 +20,7 @@ import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.api.util.helpers.SpriteItemHelper;
 import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.attacks.specialAttacks.basic.HiddenPower;
+import com.pixelmonmod.pixelmon.items.helpers.ItemHelper;
 import net.minecraft.world.item.Items;
 import org.bukkit.ChatColor;
 
@@ -229,9 +230,8 @@ public class PixelmonParserImpl {
                 "type_all",
                 "Pokemon's (All) Types",
                 pokemon -> {
-
                     return pokemon.getForm().getTypes().stream()
-                            .map(element -> element.get())
+                            .map(element -> element.value())
                             .map(Type::name)
                             .map(Objects::toString)
                             .collect(Collectors.joining(", "));
@@ -243,7 +243,7 @@ public class PixelmonParserImpl {
                 "Pokemon's First Type",
                 pokemon -> {
                     List<Type> types = pokemon.getForm().getTypes().stream()
-                            .map(element -> element.get())
+                            .map(element -> element.value())
                             .collect(Collectors.toList());
 
                     if (types.size() > 0){
@@ -260,7 +260,7 @@ public class PixelmonParserImpl {
                 pokemon -> {
 
                     List<Type> types = pokemon.getForm().getTypes().stream()
-                            .map(element -> element.get())
+                            .map(element -> element.value())
                             .collect(Collectors.toList());
 
                     if (types.size() > 1){
@@ -274,7 +274,7 @@ public class PixelmonParserImpl {
         POKEMON_REPLACER.addParser(
                 new String[]{"growth", "size"},
                 "Pokemon's Growth",
-                pokemon -> pokemon.getGrowth().get().getName()
+                pokemon -> pokemon.getGrowth().value().getName()
         );
 
         POKEMON_REPLACER.addParser(
@@ -497,7 +497,7 @@ public class PixelmonParserImpl {
         POKEMON_REPLACER.addParser(
                 "sprite",
                 "Pokemon Sprite",
-                pokemon -> SpriteItemHelper.getPhoto(pokemon).getTag().toString()
+                pokemon -> ItemHelper.getTag(SpriteItemHelper.getPhoto(pokemon)).toString()
         );
 
         POKEMON_REPLACER.addParser(
