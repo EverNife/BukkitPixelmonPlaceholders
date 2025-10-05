@@ -88,7 +88,11 @@ public class CMDCoreCommand {
                 .addPlaceholder("%the_placeholder_striped%", simpleParser -> FCColorUtil.stripColor(getPlaceholder.apply(simpleParser)))
                 .addPlaceholder("%the_result%", simpleParser -> {
                     String placeholder = getPlaceholder.apply(simpleParser);
-                    return PAPIIntegration.parse(player, FCColorUtil.stripColor(placeholder));
+                    try {
+                        return PAPIIntegration.parse(player, FCColorUtil.stripColor(placeholder));
+                    }catch (Throwable e) {
+                        return "§cError on parsing it";
+                    }
                 })
                 .addPlaceholder("%description%", simpleParser -> simpleParser.getDescription())
                 .setLineEnd(-1)
