@@ -21,6 +21,7 @@ import com.pixelmonmod.pixelmon.api.util.helpers.SpriteItemHelper;
 import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.attacks.specialAttacks.basic.HiddenPower;
 import com.pixelmonmod.pixelmon.items.helpers.ItemHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import org.bukkit.ChatColor;
 
@@ -75,7 +76,7 @@ public class PixelmonParserImpl {
         POKEMON_REPLACER.addParser(
                 "display_name",
                 "Pokemon's Display Name",
-                pokemon -> pokemon.getDisplayName()
+                pokemon -> pokemon.getDisplayName().getString()
         );
 
         POKEMON_REPLACER.addParser(
@@ -233,6 +234,7 @@ public class PixelmonParserImpl {
                     return pokemon.getForm().getTypes().stream()
                             .map(element -> element.value())
                             .map(Type::name)
+                            .map(Component::tryCollapseToString)
                             .map(Objects::toString)
                             .collect(Collectors.joining(", "));
                 }
@@ -247,7 +249,7 @@ public class PixelmonParserImpl {
                             .collect(Collectors.toList());
 
                     if (types.size() > 0){
-                        return types.get(0).name();
+                        return types.get(0).name().tryCollapseToString();
                     }
 
                     return "";
@@ -264,7 +266,7 @@ public class PixelmonParserImpl {
                             .collect(Collectors.toList());
 
                     if (types.size() > 1){
-                        return types.get(1).name();
+                        return types.get(1).name().tryCollapseToString();
                     }
 
                     return "";
@@ -274,7 +276,7 @@ public class PixelmonParserImpl {
         POKEMON_REPLACER.addParser(
                 new String[]{"growth", "size"},
                 "Pokemon's Growth",
-                pokemon -> pokemon.getGrowth().value().getName()
+                pokemon -> pokemon.getGrowth().value().getName().tryCollapseToString()
         );
 
         POKEMON_REPLACER.addParser(
@@ -440,7 +442,7 @@ public class PixelmonParserImpl {
         POKEMON_REPLACER.addParser(
                 "hidden_power",
                 "A Pokemon's Hidden Power",
-                pokemon -> HiddenPower.getHiddenPowerType(pokemon.getIVs())
+                pokemon -> HiddenPower.getHiddenPowerType(pokemon.getIVs()).location().getPath()
         );
 
         POKEMON_REPLACER.addParser(
