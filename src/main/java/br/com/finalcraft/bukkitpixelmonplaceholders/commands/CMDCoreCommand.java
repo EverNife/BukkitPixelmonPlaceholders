@@ -2,6 +2,7 @@ package br.com.finalcraft.bukkitpixelmonplaceholders.commands;
 
 import br.com.finalcraft.bukkitpixelmonplaceholders.BukkitPixelmonPlaceholders;
 import br.com.finalcraft.bukkitpixelmonplaceholders.PermissionNodes;
+import br.com.finalcraft.bukkitpixelmonplaceholders.common.settings.BPPSettings;
 import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.PixelmonPlaceholders;
 import br.com.finalcraft.evernifecore.commands.finalcmd.annotations.Arg;
 import br.com.finalcraft.evernifecore.commands.finalcmd.annotations.CMDHelpType;
@@ -57,9 +58,9 @@ public class CMDCoreCommand {
         //Apply format on the placeholder based on its parser
         Function<SimpleParser, String> getPlaceholder = simpleParser -> {
             if (PixelmonPlaceholders.MAIN_REPLACER.getProvider().getParserMap().containsValue(simpleParser)){
-                return "§6%pixelmon_§e" + simpleParser.getId() + "§6%";
+                return "§6%" + BPPSettings.BPP_PLACEHOLDER_PREFIX + "_§e" + simpleParser.getId() + "§6%";
             }else {
-                return "§6%pixelmon_party_slot_1_§e" + simpleParser.getId() + "§6%";
+                return "§6%" + BPPSettings.BPP_PLACEHOLDER_PREFIX + "_party_slot_1_§e" + simpleParser.getId() + "§6%";
             }
         };
 

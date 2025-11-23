@@ -1,6 +1,7 @@
 package br.com.finalcraft.bukkitpixelmonplaceholders;
 
 import br.com.finalcraft.bukkitpixelmonplaceholders.commands.CommandRegisterer;
+import br.com.finalcraft.bukkitpixelmonplaceholders.common.logging.BPPDebugModule;
 import br.com.finalcraft.bukkitpixelmonplaceholders.config.ConfigManager;
 import br.com.finalcraft.bukkitpixelmonplaceholders.integration.ExternalCompatibilityChecker;
 import br.com.finalcraft.bukkitpixelmonplaceholders.placeholder.PixelmonPlaceholders;
@@ -17,9 +18,9 @@ public class BukkitPixelmonPlaceholders extends JavaPlugin{
 
     public static BukkitPixelmonPlaceholders instance; {instance = this;}
 
-    private final ECLogger ecLogger = new ECLogger(this);
+    private final ECLogger<BPPDebugModule> ecLogger = new ECLogger(this, BPPDebugModule.values());
 
-    public static ECLogger getLog() {
+    public static ECLogger<BPPDebugModule> getLog() {
         return instance.ecLogger;
     }
 
