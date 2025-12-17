@@ -19,6 +19,7 @@ import com.pixelmonmod.pixelmon.storage.playerData.CaptureCombo;
 import net.minecraft.world.entity.player.Player;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 //This class has an influence from https://github.com/EnvyWare/ForgePlaceholderAPI-Extensions
@@ -68,7 +69,8 @@ public class PlayerParserImpl {
                 "dex_count_caught",
                 "Dex Count Caught",
                 player -> {
-                    PokedexStorage pokedexStorage = PokeDexStorageProxy.getStorageNow(player.getUniqueId());
+                    CompletableFuture<PokedexStorage> dexFuture = PokeDexStorageProxy.getStorage(player.getUniqueId());
+                    PokedexStorage pokedexStorage = dexFuture.join();
                     return pokedexStorage.countCaught();
                 }
         );
@@ -77,7 +79,8 @@ public class PlayerParserImpl {
                 "dex_count_seen",
                 "Dex Count Seen",
                 player -> {
-                    PokedexStorage pokedexStorage = PokeDexStorageProxy.getStorageNow(player.getUniqueId());
+                    CompletableFuture<PokedexStorage> dexFuture = PokeDexStorageProxy.getStorage(player.getUniqueId());
+                    PokedexStorage pokedexStorage = dexFuture.join();
                     return pokedexStorage.countSeen();
                 }
         );
