@@ -57,6 +57,7 @@ Player Info
     - %pixelmon_is_in_battle% - Gets if the player is in a battle (true/false)
     - %pixelmon_is_in_battle_pvp% - Gets if the player is in a battle against another player (true/false)
     - %pixelmon_is_in_battle_pve% - Gets if the player is in a battle against a wild pokemon (true/false)
+    - %pixelmon_party_contains_spec_{filters}% - Gets the number of pokemons in party matching the specified filters
 
 
 
@@ -92,6 +93,7 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_type_1% - Gets the first pokemon's type (element) in the given slot
     - %pixelmon_party_slot_1_type_2% - Gets the second pokemon's type (element) in the given slot
     - %pixelmon_party_slot_1_growth% - Gets the pokemon's growth in the given slot
+    - %pixelmon_party_slot_1_size% - Gets the pokemon's size in the given slot (alias for growth)
     - %pixelmon_party_slot_1_unbreedable% - Gets if the pokemon is unbreedable
     - %pixelmon_party_slot_1_dynamax_level% - Gets the pokemon's Dynamax Level
     - %pixelmon_party_slot_1_held_item% - Gets the pokemon's Held Item
@@ -105,7 +107,12 @@ Party Info - *Change **1** to whatever party slot you want to display Informatio
     - %pixelmon_party_slot_1_sprite% - Gets the pokemon's Sprite's NBT
     - %pixelmon_party_slot_1_friendship% - Gets the pokemon's Friendship Number (0-255)
     - %pixelmon_party_slot_1_friendship_percentage% - Gets the pokemon's Friendship Percentage (0%-100%)
+    - %pixelmon_party_slot_1_move1% - Gets the pokemon's first move
+    - %pixelmon_party_slot_1_move2% - Gets the pokemon's second move
+    - %pixelmon_party_slot_1_move3% - Gets the pokemon's third move
+    - %pixelmon_party_slot_1_move4% - Gets the pokemon's fourth move
     - %pixelmon_party_slot_1_specflag_contains_{flagName}% - Gets if the pokemon has a specific specflag ('true' | 'false')
+    - %pixelmon_party_slot_1_spec_contains_{filters}% - Gets if the pokemon matches the specified filters ('true' | 'false')
 
 - EVS Stats
     - %pixelmon_party_slot_1_ev_total% - Gets the pokemon's evs total value
