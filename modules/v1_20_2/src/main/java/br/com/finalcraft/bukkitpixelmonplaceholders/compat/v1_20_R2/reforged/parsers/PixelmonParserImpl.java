@@ -3,6 +3,7 @@ package br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_20_R2.reforged.pa
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.PokemonWrapper;
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.placeholderremapper.PlaceholderRemapper;
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.regexreplacer.RemappableRegexReplacer;
+import br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_20_R2.reforged.util.FilterUtil;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.api.Flags;
@@ -503,6 +504,12 @@ public class PixelmonParserImpl {
         POKEMON_REPLACER.addManipulator("specflag_contains_{flagName}", (pokemon, pokemonRContext) -> {
             String flagName = pokemonRContext.getString("{flagName}");
             return pokemon.hasFlag(flagName);
+        });
+
+        POKEMON_REPLACER.addManipulator("spec_contains_{filters}", (pokemon, context) -> {
+            String filters = context.getString("{filters}");
+
+            return FilterUtil.totalWithFilters(filters, new Pokemon[]{pokemon}) > 0;
         });
 
         return POKEMON_REPLACER;

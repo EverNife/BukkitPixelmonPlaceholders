@@ -2,6 +2,7 @@ package br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_21_R1.reforged.pa
 
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.placeholderremapper.PlaceholderRemapper;
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.regexreplacer.RemappableRegexReplacer;
+import br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_21_R1.reforged.util.FilterUtil;
 import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
 import br.com.finalcraft.evernifecore.nms.util.NMSUtils;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
@@ -9,6 +10,7 @@ import br.com.finalcraft.evernifecore.time.FCTimeFrame;
 import com.pixelmonmod.pixelmon.api.pokedex.PokeDexStorageProxy;
 import com.pixelmonmod.pixelmon.api.pokedex.Pokedex;
 import com.pixelmonmod.pixelmon.api.pokedex.PokedexStorage;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.api.util.helpers.RegistryHelper;
@@ -19,6 +21,8 @@ import com.pixelmonmod.pixelmon.storage.playerData.CaptureCombo;
 import net.minecraft.world.entity.player.Player;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -69,8 +73,7 @@ public class PlayerParserImpl {
                 "dex_count_caught",
                 "Dex Count Caught",
                 player -> {
-                    CompletableFuture<PokedexStorage> dexFuture = PokeDexStorageProxy.getStorage(player.getUniqueId());
-                    PokedexStorage pokedexStorage = dexFuture.join();
+                    PokedexStorage pokedexStorage = PokeDexStorageProxy.getStorage(player.getUniqueId()).join();
                     return pokedexStorage.countCaught();
                 }
         );
@@ -79,8 +82,7 @@ public class PlayerParserImpl {
                 "dex_count_seen",
                 "Dex Count Seen",
                 player -> {
-                    CompletableFuture<PokedexStorage> dexFuture = PokeDexStorageProxy.getStorage(player.getUniqueId());
-                    PokedexStorage pokedexStorage = dexFuture.join();
+                    PokedexStorage pokedexStorage = PokeDexStorageProxy.getStorage(player.getUniqueId()).join();
                     return pokedexStorage.countSeen();
                 }
         );
@@ -280,6 +282,21 @@ public class PlayerParserImpl {
                     return !battle.isPvP();
                 }
         );
+
+        MAIN_REPLACER.addManipulator("party_contains_spec_{filters}", (player, context) -> {
+            String filters = context.getString("{filters}");
+
+            PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId()).join();
+
+            List<Pokemon> pokemons = new ArrayList<>();
+
+            for (Pokemon pokemon : party.getAll()) {
+                if (pokemon == null) continue;
+                pokemons.add(pokemon);
+            }
+
+            return FilterUtil.totalWithFilters(filters, pokemons.toArray(new Pokemon[0]));
+        });
 
         return MAIN_REPLACER;
     }
