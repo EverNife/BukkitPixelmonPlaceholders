@@ -2,10 +2,12 @@ package br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_16_R3.reforged.pa
 
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.placeholderremapper.PlaceholderRemapper;
 import br.com.finalcraft.bukkitpixelmonplaceholders.common.regexreplacer.RemappableRegexReplacer;
+import br.com.finalcraft.bukkitpixelmonplaceholders.compat.v1_16_R3.reforged.util.FilterUtil;
 import br.com.finalcraft.evernifecore.config.playerdata.IPlayerData;
 import br.com.finalcraft.evernifecore.nms.util.NMSUtils;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import br.com.finalcraft.evernifecore.time.FCTimeFrame;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Pokedex;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
@@ -16,6 +18,8 @@ import com.pixelmonmod.pixelmon.storage.playerData.CaptureCombo;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 //This class has an influence from https://github.com/EnvyWare/ForgePlaceholderAPI-Extensions
@@ -261,6 +265,21 @@ public class PlayerParserImpl {
                     return !battle.isPvP();
                 }
         );
+
+        MAIN_REPLACER.addManipulator("party_contains_spec_{filters}", (player, context) -> {
+            String filters = context.getString("{filters}");
+
+            PlayerPartyStorage party = StorageProxy.getParty(player.getUniqueId());
+
+            List<Pokemon> pokemons = new ArrayList<>();
+
+            for (Pokemon pokemon : party.getAll()) {
+                if (pokemon == null) continue;
+                pokemons.add(pokemon);
+            }
+
+            return FilterUtil.totalWithFilters(filters, pokemons.toArray(new Pokemon[0]));
+        });
 
         return MAIN_REPLACER;
     }
