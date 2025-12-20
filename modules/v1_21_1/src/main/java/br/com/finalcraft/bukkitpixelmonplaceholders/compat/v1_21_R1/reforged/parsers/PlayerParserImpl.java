@@ -8,22 +8,23 @@ import br.com.finalcraft.evernifecore.nms.util.NMSUtils;
 import br.com.finalcraft.evernifecore.placeholder.replacer.RegexReplacer;
 import br.com.finalcraft.evernifecore.time.FCTimeFrame;
 import com.pixelmonmod.pixelmon.api.pokedex.PokeDexStorageProxy;
-import com.pixelmonmod.pixelmon.api.pokedex.Pokedex;
 import com.pixelmonmod.pixelmon.api.pokedex.PokedexStorage;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
-import com.pixelmonmod.pixelmon.api.util.helpers.RegistryHelper;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.spawning.PixelmonSpawning;
 import com.pixelmonmod.pixelmon.storage.playerData.CaptureCombo;
 import net.minecraft.world.entity.player.Player;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 //This class has an influence from https://github.com/EnvyWare/ForgePlaceholderAPI-Extensions
@@ -93,13 +94,17 @@ public class PlayerParserImpl {
                 player -> {
                     PokedexStorage pokedexStorage = PokeDexStorageProxy.getStorageNow(player.getUniqueId());
 
-                    Pokedex nationalDex = RegistryHelper.registryAccess()
-                            .registryOrThrow(Pokedex.REGISTRY)
-                            .get(Pokedex.NATIONAL_DEX);
+                    int caught = pokedexStorage.countCaught();
+                    int pokedexSize = PixelmonSpecies.getAll().size();
 
-                    int pokedexSize = nationalDex.pokemon().getPokemon().size();
+                    BigDecimal percent = BigDecimal.valueOf(caught)
+                            .divide(
+                                    BigDecimal.valueOf(pokedexSize),
+                                    new MathContext(5, RoundingMode.HALF_EVEN)
+                            )
+                            .multiply(BigDecimal.valueOf(100L));
 
-                    return PERCENTAGE.format((pokedexStorage.countCaught() / (pokedexSize * 1D)) * 100D) + "%";
+                    return PERCENTAGE.format(percent) + "%";
                 }
         );
 
@@ -107,12 +112,7 @@ public class PlayerParserImpl {
                 "dex_total_size",
                 "Dex Size",
                 player -> {
-                    Pokedex nationalDex = RegistryHelper.registryAccess()
-                            .registryOrThrow(Pokedex.REGISTRY)
-                            .get(Pokedex.NATIONAL_DEX);
-
-                    int pokedexSize = nationalDex.pokemon().getPokemon().size();
-
+                    int pokedexSize = PixelmonSpecies.getAll().size();
                     return pokedexSize;
                 }
         );
