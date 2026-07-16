@@ -164,7 +164,9 @@ public class PlayerParserImpl {
                 "next_legendary",
                 "The seconds until the next Legendary Spawn",
                 player -> {
-                    return TimeUnit.MILLISECONDS.toSeconds(PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis());
+                    // Pixelmon only advances nextSpawnTime when the spawner completes a cycle; while it
+                    // can't run (e.g. capacity full) the value falls behind now, so clamp to avoid negatives.
+                    return TimeUnit.MILLISECONDS.toSeconds(Math.max(0L, PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis()));
                 }
         );
 
@@ -172,7 +174,7 @@ public class PlayerParserImpl {
                 "next_legendary_minutes",
                 "The minutes until the next Legendary Spawn",
                 player -> {
-                    return TimeUnit.MILLISECONDS.toMinutes(PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis());
+                    return TimeUnit.MILLISECONDS.toMinutes(Math.max(0L, PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis()));
                 }
         );
 
@@ -181,7 +183,34 @@ public class PlayerParserImpl {
                 "The formatted time until the next Legendary Spawn",
                 player -> {
                     return FCTimeFrame.of(
-                            PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis()
+                            Math.max(0L, PixelmonSpawning.legendarySpawner.nextSpawnTime - System.currentTimeMillis())
+                    );
+                }
+        );
+
+        MAIN_REPLACER.addParser(
+                "next_megaboss",
+                "The seconds until the next Mega Boss Spawn",
+                player -> {
+                    // Clamp as in next_legendary: nextSpawnTime freezes while the spawner can't run, so avoid negatives.
+                    return TimeUnit.MILLISECONDS.toSeconds(Math.max(0L, PixelmonSpawning.megaBossSpawner.nextSpawnTime - System.currentTimeMillis()));
+                }
+        );
+
+        MAIN_REPLACER.addParser(
+                "next_megaboss_minutes",
+                "The minutes until the next Mega Boss Spawn",
+                player -> {
+                    return TimeUnit.MILLISECONDS.toMinutes(Math.max(0L, PixelmonSpawning.megaBossSpawner.nextSpawnTime - System.currentTimeMillis()));
+                }
+        );
+
+        MAIN_REPLACER.addParser(
+                "next_megaboss_formatted",
+                "The formatted time until the next Mega Boss Spawn",
+                player -> {
+                    return FCTimeFrame.of(
+                            Math.max(0L, PixelmonSpawning.megaBossSpawner.nextSpawnTime - System.currentTimeMillis())
                     );
                 }
         );
