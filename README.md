@@ -7,131 +7,302 @@
 
 # BukkitPixelmonPlaceholders
 
-This plugin integrates the mod Pixelmon (reforged) with the plugin PlaceholderAPI, so you will be able to use Pixelmon Placeholders on most plugins!
+Bridge Pixelmon Reforged data into the Bukkit/PlaceholderAPI ecosystem.
 
-# Requirements
+BukkitPixelmonPlaceholders is a Bukkit/Spigot plugin (v1.3.1) that exposes Pixelmon Reforged
+data as PlaceholderAPI placeholders. It connects the Forge-based Pixelmon mod with Bukkit
+plugins, giving server admins access to live party data, Pokedex statistics, battle state, and
+detailed per-Pokemon attributes directly inside any PAPI-compatible plugin (scoreboards, chat
+formatters, menus, etc.). It targets hybrid Forge/Bukkit servers (Arclight, Mohist, Crucible)
+running Pixelmon Reforged.
 
-This plugin requires:
-- [EverNifeCore](https://github.com/evernife/EverNifeCore)
-- [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)
+---
 
-# How to Build this Project
+## Features
 
+- **Party size placeholders** - total, egg-only, able-only, and normal-only counts for a
+  player's active party.
+- **Pokedex statistics** - species caught, species seen, completion percentage, and total
+  Pokedex size.
+- **Battle state detection** - whether a player is currently in any battle, PvP or PvE.
+- **Win/loss/KDR tracking** - battle stats surfaced as plain numbers.
+- **Party-level aggregates** - average, lowest, and highest level across all party members.
+- **Legendary spawn timer** - seconds, minutes, and a formatted countdown to the next legendary
+  spawn event.
+- **Catch-combo tracking** - current combo count, species identifier, and localized species name.
+- **Per-slot Pokemon placeholders** via `%pixelmon_party_slot_N_<attr>%` (slots 1-6):
+  - Identity: name, display name, species, Pokedex number, form, form (unlocalized).
+  - Stats: level, exp, exp to level up, IV and EV totals and per-stat breakdowns, IV/EV
+    percentages, Dynamax level, friendship value and percentage.
+  - Types: first type, second type, and all types combined.
+  - Nature: base nature with optional mint-nature annotation.
+  - Ability, gender (color-coded), growth/size category.
+  - Flags: shiny (boolean + formatted), legendary, ultra beast, egg/non-egg, breedability,
+    Gigantamax factor.
+  - Original trainer name and UUID.
+  - Held item name, custom texture path, palette name (localized and unlocalized).
+  - Moveset: up to four move names by slot index.
+  - Hidden power type.
+  - Egg steps progress (`walked/total`) and egg groups.
+  - Mew clone count and Lake Trio (Azelf/Mesprit/Uxie) enchantment count.
+  - Arbitrary spec-flag check: `specflag_contains_{flagName}`.
+  - Spec filter check for a single slot: `spec_contains_{filters}`.
+  - Sprite item NBT tag.
+- **Party filter placeholder** - `party_contains_spec_{filters}` counts how many party members
+  match a set of Boolean filters (egg, shiny, mega, ultrabeast, legendary).
+- **`uncolorfy_` manipulator** - strips color codes from any inner placeholder result (e.g.
+  `%pixelmon_uncolorfy_party_slot_1_gender%`).
+- **Placeholder remapper** - `Remappings.yml` lets admins create aliases for any placeholder
+  without restarting the server.
+- **Configurable PAPI prefix** - defaults to `pixelmon`; can be changed to avoid conflicts with
+  Neovitalism's PixelmonExtension.
+- **Default value for empty party slots** - configurable fallback returned when a slot has no
+  Pokemon (useful for DeluxeMenus and similar plugins that do not handle empty strings well).
+- **Multi-version compat modules** - ships separate adapter jars for MC 1.12.2, 1.16.5, 1.20.2,
+  and 1.21.1; the correct one is loaded automatically at runtime via reflection.
+- **Hot reload** - `/bpp reload` reloads the config without a full server restart.
+- **In-game placeholder browser** - `/bpp list` shows all available placeholders with live
+  values and click-to-copy support.
+- **bStats telemetry** (ID 16405) and SpigotMC listing (ID 105174) via EverNifeCore.
+
+---
+
+## Requirements
+
+| Requirement | Details |
+|---|---|
+| Server platform | Arclight, Mohist, Crucible, or any other Forge/Bukkit hybrid |
+| Minecraft version | 1.12.2, 1.16.5, 1.19.2, 1.20.2, or 1.21.1 (compat module must match the server version) |
+| Pixelmon Reforged | A version compatible with the target MC version |
+| Java runtime | Java 8 or later (plugin bytecode targets Java 8; JDK 21 required to build the v1_21_1 compat module) |
+| EverNifeCore | Required - hard dependency declared in `plugin.yml` |
+| PlaceholderAPI | Optional soft dependency - placeholders are only registered when PAPI is present |
+
+---
+
+## Installation
+
+1. Install **EverNifeCore** into the `plugins/` folder - the plugin will not load without it.
+2. Install **PlaceholderAPI** so that placeholders are available server-wide (strongly
+   recommended).
+3. Drop `BukkitPixelmonPlaceholders-<version>.jar` into the `plugins/` folder.
+4. Start or restart the server. The plugin auto-detects the running MC version and loads the
+   matching compat module from within the jar.
+5. (Optional) Edit `plugins/BukkitPixelmonPlaceholders/config.yml` to change the PAPI prefix
+   or the empty-slot fallback value, then restart the server (prefix change) or run
+   `/bpp reload` (other settings).
+
+> If Neovitalism's PixelmonExtension is also installed, you must change
+> `Settings.PAPIPlaceholderPrefix` in `config.yml` to something other than `pixelmon` (for
+> example `bpppixelmon`) and restart the server to avoid placeholder prefix collisions.
+
+---
+
+## Commands
+
+| Command | Aliases | Description | Permission |
+|---|---|---|---|
+| `/bpp list [page]` | `/bpp test [page]` | Lists all available placeholders with live values for the executing player. Player only (not console). | `bukkitpixelmonplaceholders.command.test` |
+| `/bpp reload` | - | Reloads the plugin configuration. | `bukkitpixelmonplaceholders.command.reload` |
+
+The root command `/bpp` also accepts the full alias `/bukkitpixelmonplaceholders`.
+
+---
+
+## Permissions
+
+| Permission | Description | Default |
+|---|---|---|
+| `bukkitpixelmonplaceholders.command.test` | Allows the player to browse all registered placeholders with live values. | op |
+| `bukkitpixelmonplaceholders.command.reload` | Allows reloading the plugin configuration. | op |
+
+---
+
+## Configuration
+
+The plugin creates two files under `plugins/BukkitPixelmonPlaceholders/`:
+
+### `config.yml`
+
+| Key | Default | Description |
+|---|---|---|
+| `Settings.PAPIPlaceholderPrefix` | `pixelmon` | The PAPI prefix for all placeholders (e.g. `%pixelmon_party_size_all%`). Change this if another plugin claims the `pixelmon` prefix. Requires a full server restart to take effect. |
+| `Settings.DEFAULT_PLACEHOLDER_WHEN_NO_POKEMON` | `""` (empty string) | Value returned when a party slot is empty. Set to a non-empty string (e.g. `None`) for compatibility with plugins such as DeluxeMenus that cannot handle empty placeholder results. |
+
+### `Remappings.yml`
+
+Allows remapping placeholder identifiers at runtime. Any entry here creates an alias that is
+resolved before the default parser runs, enabling short or custom names for built-in
+placeholders without a server restart.
+
+---
+
+## Placeholder Reference
+
+All placeholders follow the pattern `%<prefix>_<id>%`. With the default prefix `pixelmon`:
+
+**Player-level placeholders**
+
+| Placeholder | Description |
+|---|---|
+| `%pixelmon_party_size_all%` | Total Pokemon (including eggs) in party |
+| `%pixelmon_party_size_ableonly%` | Able (non-egg) Pokemon count |
+| `%pixelmon_party_size_eggonly%` | Egg count |
+| `%pixelmon_party_size_pokemononly%` | Non-egg Pokemon count |
+| `%pixelmon_dex_count_caught%` | Species caught in the Pokedex |
+| `%pixelmon_dex_count_seen%` | Species seen in the Pokedex |
+| `%pixelmon_dex_percentage%` | Caught percentage (e.g. `47.3%`) |
+| `%pixelmon_dex_total_size%` | Total number of species in the Pokedex |
+| `%pixelmon_wins%` | Total battle wins |
+| `%pixelmon_losses%` | Total battle losses |
+| `%pixelmon_kdr%` | Win/loss ratio as percentage |
+| `%pixelmon_average_level%` | Average level of party |
+| `%pixelmon_lowest_level%` | Lowest level in party |
+| `%pixelmon_highest_level%` | Highest level in party |
+| `%pixelmon_next_legendary%` | Seconds until next legendary spawn |
+| `%pixelmon_next_legendary_minutes%` | Minutes until next legendary spawn |
+| `%pixelmon_next_legendary_formatted%` | Formatted countdown (e.g. `2m 30s`) |
+| `%pixelmon_catchcombo_amount%` | Current catch combo count |
+| `%pixelmon_catchcombo_species%` | Species internal name in catch combo |
+| `%pixelmon_catchcombo_species_localized%` | Localized species name in catch combo |
+| `%pixelmon_is_in_battle%` | `true`/`false` - player is in any battle |
+| `%pixelmon_is_in_battle_pvp%` | `true`/`false` - player is in a PvP battle |
+| `%pixelmon_is_in_battle_pve%` | `true`/`false` - player is in a PvE battle |
+| `%pixelmon_party_contains_spec_[shiny=true\|legendary=false]%` | Count of party members matching the given filters |
+
+**Per-slot placeholders** - replace `1` with the desired slot number (1-6):
+
+| Placeholder | Description |
+|---|---|
+| `%pixelmon_party_slot_1_is_present%` | `true` if the slot contains a Pokemon |
+| `%pixelmon_party_slot_1_name%` | Localized Pokemon name |
+| `%pixelmon_party_slot_1_display_name%` | Display name |
+| `%pixelmon_party_slot_1_species%` | Species localized name |
+| `%pixelmon_party_slot_1_pokedex_number%` | National Pokedex index |
+| `%pixelmon_party_slot_1_level%` | Level |
+| `%pixelmon_party_slot_1_exp%` | Current experience points |
+| `%pixelmon_party_slot_1_exp_to_level_up%` | Experience needed to reach the next level |
+| `%pixelmon_party_slot_1_form%` | Form localized name |
+| `%pixelmon_party_slot_1_form_unlocalized%` | Form translation key |
+| `%pixelmon_party_slot_1_shiny%` | `true`/`false` |
+| `%pixelmon_party_slot_1_shiny_special%` | Formatted shiny label, empty if not shiny |
+| `%pixelmon_party_slot_1_is_egg%` | `true` if the slot holds an egg |
+| `%pixelmon_party_slot_1_is_non_egg%` | `true` if the slot does not hold an egg |
+| `%pixelmon_party_slot_1_egg_steps%` | Steps walked / steps total for an egg |
+| `%pixelmon_party_slot_1_egg_groups%` | Egg group names |
+| `%pixelmon_party_slot_1_is_legendary%` | `true`/`false` |
+| `%pixelmon_party_slot_1_is_legendary_special%` | Formatted legendary label |
+| `%pixelmon_party_slot_1_is_ultrabeast%` | `true`/`false` |
+| `%pixelmon_party_slot_1_is_ultrabeast_special%` | Formatted ultra beast label |
+| `%pixelmon_party_slot_1_ability%` | Ability localized name |
+| `%pixelmon_party_slot_1_gender%` | Gender with color coding |
+| `%pixelmon_party_slot_1_nature%` | Base nature, with mint nature annotation if applicable |
+| `%pixelmon_party_slot_1_type_all%` | All types comma-separated |
+| `%pixelmon_party_slot_1_type_1%` | First type |
+| `%pixelmon_party_slot_1_type_2%` | Second type (empty if mono-type) |
+| `%pixelmon_party_slot_1_growth%` | Growth/size category |
+| `%pixelmon_party_slot_1_size%` | Alias for `growth` |
+| `%pixelmon_party_slot_1_unbreedable%` | Colored breedable/unbreedable label |
+| `%pixelmon_party_slot_1_dynamax_level%` | Dynamax level |
+| `%pixelmon_party_slot_1_held_item%` | Held item name, empty if none |
+| `%pixelmon_party_slot_1_texture%` | Custom texture path |
+| `%pixelmon_party_slot_1_palette%` | Palette localized name |
+| `%pixelmon_party_slot_1_palette_unlocalized%` | Palette internal name |
+| `%pixelmon_party_slot_1_clones%` | Number of Mew clones (Mew only) |
+| `%pixelmon_party_slot_1_enchantments%` | Lake Trio enchantment count |
+| `%pixelmon_party_slot_1_hidden_power%` | Hidden power type |
+| `%pixelmon_party_slot_1_can_gmax%` | `true` if has Gigantamax factor |
+| `%pixelmon_party_slot_1_sprite%` | Sprite item NBT tag |
+| `%pixelmon_party_slot_1_friendship%` | Friendship value (0-255) |
+| `%pixelmon_party_slot_1_friendship_percentage%` | Friendship as percentage |
+| `%pixelmon_party_slot_1_move1%` - `%pixelmon_party_slot_1_move4%` | Move names by index |
+| `%pixelmon_party_slot_1_iv_total%` | Sum of all IVs |
+| `%pixelmon_party_slot_1_iv_total_max%` | Maximum possible IV total |
+| `%pixelmon_party_slot_1_iv_percentage%` | IV completeness percentage |
+| `%pixelmon_party_slot_1_iv_hp%` / `iv_attack` / `iv_defense` / `iv_special_attack` / `iv_special_defense` / `iv_speed` | Per-stat IV values |
+| `%pixelmon_party_slot_1_ev_total%` | Sum of all EVs |
+| `%pixelmon_party_slot_1_ev_total_max%` | Maximum possible EV total |
+| `%pixelmon_party_slot_1_ev_percentage%` | EV completeness percentage |
+| `%pixelmon_party_slot_1_ev_hp%` / `ev_attack` / `ev_defense` / `ev_special_attack` / `ev_special_defense` / `ev_speed` | Per-stat EV values |
+| `%pixelmon_party_slot_1_originaltrainer_name%` | Original trainer name |
+| `%pixelmon_party_slot_1_originaltrainer_uuid%` | Original trainer UUID |
+| `%pixelmon_party_slot_1_specflag_contains_{flagName}%` | `true`/`false` - checks a named spec flag |
+| `%pixelmon_party_slot_1_spec_contains_{filters}%` | `true`/`false` - checks spec filters against this slot |
+
+Use `/bpp list` in-game to browse all placeholders with live values for your current party.
+
+---
+
+## Building from Source
+
+The project uses the Gradle wrapper. The recommended JDK is **JDK 25**
+(`C:\Users\Petrus\.jdks\temurin-25.0.3`). Source and target compatibility are set to Java 8.
+
+> The `modules/v1_21_1` compat subproject requires JDK 21 and currently has a hardcoded path
+> (`C:\Program Files\Eclipse Adoptium\jdk-21.0.6.7-hotspot\`) in its `build.gradle`. Adjust
+> this path to match your local JDK 21 installation before building.
+
+**Step 1 - build compat modules and stage jars into `libs/`:**
+
+```powershell
+$env:JAVA_HOME = "C:\Users\Petrus\.jdks\temurin-25.0.3"
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+.\gradlew buildAndMoveJars
 ```
- gradlew build
+
+**Step 2 - build the final shadow jar:**
+
+```powershell
+.\gradlew shadowJar
 ```
 
-# Placeholders
+The deployable artifact is a **shadow jar** (the default `jar` task is disabled). Output:
+`build/libs/BukkitPixelmonPlaceholders-<version>.jar`. The `buildAndMoveJars` task builds each
+compat subproject with its own Gradle wrapper and copies the resulting `*-COMPAT.jar` into the
+root `libs/` directory, which is then shaded into the final jar.
 
-Command for testing the placeholders:
-> **/bpp test** _(permission: bukkitpixelmonplaceholders.command.test)_
-![bpp-test-command.png](bpp-test-command.png)
+The `clean` task cascades into each compat subproject and removes all `*-COMPAT.jar` files
+from `libs/`.
 
-For notice, some placeholders has collors!
-To remove a color from any placeholder, prefix the placeholder with %pixelmon_uncolorfy
+---
 
-Ex: **%pixelmon_party_slot_1_gender%** will be **%pixelmon_uncolorfy_party_slot_1_gender%**
+## Architecture
 
-Player Info
-- Generic
-    - %pixelmon_party_size_all% - Gets the number of Pokemons (couting eggs as well) In a player's party
-    - %pixelmon_party_size_ableonly% - Gets the number of Pokemons (only Able Pokemons) In a player's party
-    - %pixelmon_party_size_eggonly% - Gets the number of Pokemon Eggs In a player's party
-    - %pixelmon_party_size_pokemononly% - Gets the number of Pokemons (ignoring eggs) In a player's party
-    - %pixelmon_wins% - Gets the player's wins
-    - %pixelmon_losses% - Gets the player's losses
-    - %pixelmon_kdr% - Gets the player's win loss ratio
-    - %pixelmon_dex_count_caught% - Gets the player's dex caught count
-    - %pixelmon_dex_count_seen% - Gets the player's dex seen count
-    - %pixelmon_dex_total_size% - Gets the total size of the dex
-    - %pixelmon_dex_percentage% - Gets the player's dex completion percentage
-    - %pixelmon_average_level% - Gets the player's party's average level
-    - %pixelmon_lowest_level% - Gets the player's party's lowest level
-    - %pixelmon_highest_level% - Gets the player's party's highest level
-    - %pixelmon_next_legendary% - Gets the next legendary spawn time in seconds
-    - %pixelmon_next_legendary_minutes% - Gets the next legendary spawn time in seconds
-    - %pixelmon_next_legendary_formatted% - Gets the next legendary spawn time formatted
-    - %pixelmon_catchcombo_amount% - Gets the player's CatchCombo's Amount
-    - %pixelmon_catchcombo_species% - Gets the player's CatchCombo's Species Name
-    - %pixelmon_catchcombo_species_localized% - Gets the player's CatchCombo's Species LocalizedName
-    - %pixelmon_is_in_battle% - Gets if the player is in a battle (true/false)
-    - %pixelmon_is_in_battle_pvp% - Gets if the player is in a battle against another player (true/false)
-    - %pixelmon_is_in_battle_pve% - Gets if the player is in a battle against a wild pokemon (true/false)
-    - %pixelmon_party_contains_spec_{filters}% - Gets the number of pokemons in party matching the specified filters
+**Entry point:** `br.com.finalcraft.bukkitpixelmonplaceholders.BukkitPixelmonPlaceholders`
+extends `JavaPlugin` and is annotated with `@ECPlugin` (registers bStats ID 16405, SpigotMC
+ID 105174). On enable it initializes config, registers commands via EverNifeCore's
+`FinalCMDManager`, hooks into PAPI when available, and runs `ExternalCompatibilityChecker` to
+warn about known prefix conflicts.
 
+**Main systems:**
 
+| System | Description |
+|---|---|
+| `config/ConfigManager` | Loads `config.yml` and `Remappings.yml` via EverNifeCore's `Config` |
+| `placeholder/PixelmonPlaceholders` | Holds the two `RegexReplacer` instances (player-level and Pokemon-level) and registers them with PAPI |
+| `commands/CMDCoreCommand` | Main admin command wired through EverNifeCore's `FinalCMDManager` |
+| `integration/ExternalCompatibilityChecker` | Detects Neovitalism's PixelmonExtension and logs a severe warning about prefix conflicts |
+| `modules/Commons` | Shared library: `PixelmonPlaceholderFactory` (abstract, version-dispatched), `BPPSettings`, `PlaceholderRemapper`, `PokemonWrapper`, `RemappableRegexReplacer` |
+| `modules/v1_12_2` | Compat shim for MC 1.12.2 / Pixelmon Reforged on Forge 1.12.2 |
+| `modules/v1_16_5` | Compat shim for MC 1.16.5 - contains the most complete placeholder set |
+| `modules/v1_20_2` | Compat shim for MC 1.20.2 |
+| `modules/v1_21_1` | Compat shim for MC 1.21.1 (requires JDK 21 to compile) |
 
-Party Info - *Change **1** to whatever party slot you want to display Information on:*
+`PixelmonPlaceholderFactory.create()` resolves the current MC version at runtime and loads
+the matching `PixelmonPlaceholderFactoryImpl` via reflection. Each compat jar must be present
+inside the shadow jar or the plugin will fail at runtime when the first placeholder is evaluated.
 
-- Generic
-    - %pixelmon_party_slot_1_is_present% - return 'true' if there is a pokemon on that slot, 'false' otherwise!
-    - %pixelmon_party_slot_1_pokedex_number% - Gets the pokemon's National Index
-    - %pixelmon_party_slot_1_exp% - Gets the pokemon's exp in the given slot
-    - %pixelmon_party_slot_1_exp_to_level_up% - Gets the pokemon's exp to next level in the given slot
-    - %pixelmon_party_slot_1_name% - Gets the pokemon's name in the given slot
-    - %pixelmon_party_slot_1_display_name% - Gets the pokemon's display name in the given slot
-    - %pixelmon_party_slot_1_species% - Gets the pokemon's species
-    - %pixelmon_party_slot_1_level% - Gets the pokemon's level in the given slot
-    - %pixelmon_party_slot_1_form% - Gets the pokemon's form in the given slot
-    - %pixelmon_party_slot_1_form_unlocalized% - Gets the pokemon's unlocalized form in the given slot
-    - %pixelmon_party_slot_1_shiny% - Gets the pokemon's shiny status in the given slot
-    - %pixelmon_party_slot_1_shiny_special% - Gets the pokemon's shiny status in the given slot with a colored String.
-    - %pixelmon_party_slot_1_is_egg% - Gets if the pokemon is an egg (true/false);
-    - %pixelmon_party_slot_1_is_non_egg% - Gets if the pokemon is not an egg (true/false);
-    - %pixelmon_party_slot_1_egg_steps% - Gets the eggs's Amount of steps remaining
-    - %pixelmon_party_slot_1_egg_groups% - Gets the eggs's Group's names.
-    - %pixelmon_party_slot_1_is_ultrabeast% - Gets if the pokemon is ultrabeast;
-    - %pixelmon_party_slot_1_is_ultrabeast_special% - Gets if the pokemon is ultrabeast with a colored String.
-    - %pixelmon_party_slot_1_is_legendary% - Gets if the pokemon is legendary;
-    - %pixelmon_party_slot_1_is_legendary_special% - Gets if the pokemon is legendary with a colored String.
-    - %pixelmon_party_slot_1_originaltrainer_name% - Gets the pokemon's Original Trainer Name
-    - %pixelmon_party_slot_1_originaltrainer_uuid% - Gets the pokemon's Original Trainer UUID
-    - %pixelmon_party_slot_1_ability% - Gets the pokemon's ability in the given slot
-    - %pixelmon_party_slot_1_gender% - Gets the pokemon's gender in the given slot
-    - %pixelmon_party_slot_1_nature% - Gets the pokemon's nature in the given slot
-    - %pixelmon_party_slot_1_type_all% - Gets all the pokemon's type (elements) in the given slot
-    - %pixelmon_party_slot_1_type_1% - Gets the first pokemon's type (element) in the given slot
-    - %pixelmon_party_slot_1_type_2% - Gets the second pokemon's type (element) in the given slot
-    - %pixelmon_party_slot_1_growth% - Gets the pokemon's growth in the given slot
-    - %pixelmon_party_slot_1_size% - Gets the pokemon's size in the given slot (alias for growth)
-    - %pixelmon_party_slot_1_unbreedable% - Gets if the pokemon is unbreedable
-    - %pixelmon_party_slot_1_dynamax_level% - Gets the pokemon's Dynamax Level
-    - %pixelmon_party_slot_1_held_item% - Gets the pokemon's Held Item
-    - %pixelmon_party_slot_1_texture% - Gets the pokemon's Texture Path
-    - %pixelmon_party_slot_1_palette% - Gets the pokemon's Palette Name
-    - %pixelmon_party_slot_1_palette_unlocalized% - Gets the pokemon's Palette Name Unlocalized
-    - %pixelmon_party_slot_1_clones% - Gets the pokemon's Number of Mew Clones
-    - %pixelmon_party_slot_1_enchantments% - Gets the pokemon's Number of Lake Trio Enchantments
-    - %pixelmon_party_slot_1_hidden_power% - Gets the pokemon's Hidden Power
-    - %pixelmon_party_slot_1_can_gmax% - Gets the pokemon's G-Max Potential
-    - %pixelmon_party_slot_1_sprite% - Gets the pokemon's Sprite's NBT
-    - %pixelmon_party_slot_1_friendship% - Gets the pokemon's Friendship Number (0-255)
-    - %pixelmon_party_slot_1_friendship_percentage% - Gets the pokemon's Friendship Percentage (0%-100%)
-    - %pixelmon_party_slot_1_move1% - Gets the pokemon's first move
-    - %pixelmon_party_slot_1_move2% - Gets the pokemon's second move
-    - %pixelmon_party_slot_1_move3% - Gets the pokemon's third move
-    - %pixelmon_party_slot_1_move4% - Gets the pokemon's fourth move
-    - %pixelmon_party_slot_1_specflag_contains_{flagName}% - Gets if the pokemon has a specific specflag ('true' | 'false')
-    - %pixelmon_party_slot_1_spec_contains_{filters}% - Gets if the pokemon matches the specified filters ('true' | 'false')
+---
 
-- EVS Stats
-    - %pixelmon_party_slot_1_ev_total% - Gets the pokemon's evs total value
-    - %pixelmon_party_slot_1_ev_total_max% - Gets the pokemon's evs max value
-    - %pixelmon_party_slot_1_ev_percentage% - Gets the pokemon's Percentage of Total IVs Gained
-    - %pixelmon_party_slot_1_ev_attack% - Gets the pokemon's attack ev stat in the given slot
-    - %pixelmon_party_slot_1_ev_defense% - Gets the pokemon's defence ev stat in the given slot
-    - %pixelmon_party_slot_1_ev_hp% - Gets the pokemon's hp ev stat in the given slot
-    - %pixelmon_party_slot_1_ev_special_attack% - Gets the pokemon's special attack ev stat in the given slot
-    - %pixelmon_party_slot_1_ev_special_defense% - Gets the pokemon's special defence ev stat in the given slot
-    - %pixelmon_party_slot_1_ev_speed% - Gets the pokemon's speed ev stat in the given slot
-- IVS Stats
-    - %pixelmon_party_slot_1_iv_total% - Gets the pokemon's ivs total value
-    - %pixelmon_party_slot_1_iv_total_max% - Gets the pokemon's ivs max value
-    - %pixelmon_party_slot_1_iv_percentage% - Gets the pokemon's Percentage of Total IVs Gained
-    - %pixelmon_party_slot_1_iv_attack% - Gets the pokemon's attack iv stat in the given slot
-    - %pixelmon_party_slot_1_iv_defense% - Gets the pokemon's defence iv stat in the given slot
-    - %pixelmon_party_slot_1_iv_hp% - Gets the pokemon's hp iv stat in the given slot
-    - %pixelmon_party_slot_1_iv_special_attack% - Gets the pokemon's special attack iv stat in the given slot
-    - %pixelmon_party_slot_1_iv_special_defense% - Gets the pokemon's special defence iv stat in the given slot
-    - %pixelmon_party_slot_1_iv_speed% - Gets the pokemon's speed iv stat in the given slot
-  
+## Notes / Known Limitations
+
+- **Requires a Forge/Bukkit hybrid server.** Pixelmon Reforged is a Forge mod; this plugin only
+  works on hybrid platforms such as Arclight, Mohist, or Crucible.
+- **Prefix change requires a server restart.** `Settings.PAPIPlaceholderPrefix` is read once at
+  startup; `/bpp reload` does not apply a prefix change.
+- **`party_contains_spec_` and `spec_contains_` filter syntax is brittle.** The filter string
+  (e.g. `[shiny=true|legendary=false]`) must be formatted exactly or the parser throws a
+  `RuntimeException`.
+- **Neovitalism's PixelmonExtension conflict.** Both plugins default to the `pixelmon` PAPI
+  prefix. If both are installed without changing the prefix, placeholder lookups will be
+  ambiguous. The plugin logs a warning at startup but cannot resolve the conflict automatically.

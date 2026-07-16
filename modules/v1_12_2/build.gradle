@@ -1,10 +1,11 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net/' }
-        jcenter()
         mavenCentral()
     }
     dependencies {
+        // anatawa12's ForgeGradle 2.3 fork is the only maintained way to build a 1.12.2 mod; it caps at
+        // Gradle 6 and runs on Java 8, so this module stays federated on its own (old) wrapper.
         classpath 'com.anatawa12.forge:ForgeGradle:2.3-1.0.+'
     }
 }
@@ -29,7 +30,6 @@ repositories {
         dirs 'libs'
     }
     mavenCentral()
-    jcenter()
     maven {
         name = 'spigotmc-repo'
         url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
@@ -54,8 +54,10 @@ dependencies {
 
     compileOnly name: "Pixelmon-1.12.2-8.4.3-noassets"
 
-    compileOnly project('Commons')
-
     //Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.46'
+}
+
+jar {
+    archiveName = 'v1_12_2-COMPAT.jar'
 }

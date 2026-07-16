@@ -149,11 +149,12 @@ dependencies {
     compileOnly "br.com.finalcraft:EverNifeCore:2.0.4"
     compileOnly name: "Pixelmon-1.21.1-9.3.9-universal-noAssets"
 
-    compileOnly project('Commons')
+    // Commons is delivered by the root orchestrator as libs/Commons.jar (flatDir).
+    compileOnly name: 'Commons'
 
     //Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.46'
+    annotationProcessor 'org.projectlombok:lombok:1.18.46'
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

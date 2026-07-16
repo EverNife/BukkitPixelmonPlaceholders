@@ -1,33 +1,24 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            url = uri("https://plugins.gradle.org/m2/")
-        }
-    }
-    dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:6.1.0"
-    }
-}
+import org.gradle.api.attributes.java.TargetJvmVersion
+import org.gradle.process.ExecOperations
+import javax.inject.Inject
 
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-apply plugin: "com.github.johnrengelman.shadow"
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'com.gradleup.shadow' version '9.5.1'
+}
 
 group 'br.com.finalcraft'
 version '1.3.1'
 
-targetCompatibility = 1.8
-sourceCompatibility = 1.8
-
-compileJava.options.encoding = 'UTF-8'
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+// Run the build on the house-standard JDK 25 (Gradle 9.6.1 runs on it directly).
+// compileJava below overrides to emit Java 8 bytecode via Jabel.
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
 
 repositories {
-    flatDir { //Change this to where are your local libs
+    flatDir { //Holds the per-version *-COMPAT.jar the orchestrator produces (gitignored, rebuilt each run)
         dirs 'libs'
     }
     mavenCentral()
@@ -35,136 +26,168 @@ repositories {
         name = 'spigotmc-repo'
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots'
     }
-    maven { url = "https://jitpack.io" }
-    maven { url = "https://maven.petrus.dev/public" }
+    maven { url = 'https://jitpack.io' }
+    maven { url = 'https://maven.petrus.dev/public' } //EverNifeCore + the Jabel fork live here
 }
 
 dependencies {
+    // Jabel fork: rides a Java 25 javac and still emits Java 8 bytecode (upstream 0.4.2 can't hook a Java 25 compiler).
+    annotationProcessor 'br.com.finalcraft:jabel:1.2.0'
+    compileOnly          'br.com.finalcraft:jabel:1.2.0'
+
     compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
-    compileOnly "br.com.finalcraft:EverNifeCore:2.0.4"
+    compileOnly 'br.com.finalcraft:EverNifeCore:2.0.4'
 
     implementation project(':modules:Commons')
 
-    implementation fileTree(dir: 'libs', include: ['*.jar']) // Include all .jar files in the 'libs' directory
+    // Shade every compat jar the orchestrator drops into libs/
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    //Annotations
     compileOnly 'org.jetbrains:annotations:23.0.0'
-
-    //Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.46'
 }
 
-// Define your projects with their respective JAVA_HOME versions
-def projectsWithJava = [
-        'modules/v1_12_2': System.getenv('JAVA_HOME'), //Java 8
-        'modules/v1_16_5': System.getenv('JAVA_HOME'), //Java 8
-        'modules/v1_20_2': System.getenv('JAVA_HOME'), //Java 8
-        'modules/v1_21_1': 'C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.6.7-hotspot\\',
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs.add('-parameters') //Keep parameter names on the compiled jar
+}
+
+// Jabel: write modern Java syntax, emit Java 8 bytecode (mirrors EverNifeCore).
+// sourceCompatibility raises javac's language gate; options.release clamps the API to Java 8 -> major 52.
+configure([tasks.compileJava]) {
+    sourceCompatibility = 25
+    options.release = 8
+    javaCompiler = javaToolchains.compilerFor {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+// Gradle 9: a Java-8-bytecode project must still be allowed to resolve JVM-11+ dependencies,
+// and must not advertise itself as "JVM 25 only". Tag only resolvable/consumable configurations
+// (Gradle 9 forbids attributes on declarable-only buckets), then suppress module metadata so the
+// artifact is consumed via its POM.
+configurations.configureEach {
+    if (canBeResolved || canBeConsumed) {
+        attributes {
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
+        }
+    }
+}
+tasks.withType(GenerateModuleMetadata).configureEach {
+    enabled = false
+}
+
+// =====================================================================
+//  Federated compat orchestrator
+//
+//  Each per-version compat module keeps its own Gradle wrapper + Forge
+//  toolchain (their required Gradle versions are mutually incompatible and
+//  none can run on this Gradle 9 root). This task drives each module's own
+//  gradlew on the JDK that toolchain needs, then copies its *-COMPAT.jar
+//  into libs/ so the root shadowJar can shade it. Machine JDK locations are
+//  centralized here; adjust for a different machine.
+// =====================================================================
+ext.jdk8  = 'C:\\Users\\Petrus\\.jdks\\temurin-1.8.0_492'
+ext.jdk17 = 'C:\\Users\\Petrus\\.jdks\\temurin-17.0.19'
+ext.jdk21 = 'C:\\Users\\Petrus\\.jdks\\temurin-21.0.11'
+
+// module dir -> [ runner: JAVA_HOME for that module's Gradle daemon, needsCommons: shade Commons at compileOnly ]
+ext.compatModules = [
+        'modules/v1_12_2': [runner: jdk8,  needsCommons: false], // anatawa12 FG2.3 on Gradle 4.10.3 (runs on Java 8)
+        'modules/v1_16_5': [runner: jdk21, needsCommons: true],  // ForgeGradle 6 on Gradle 8.8, compiles on the Java 8 toolchain
+        'modules/v1_20_2': [runner: jdk17, needsCommons: true],  // NeoGradle on Gradle 8.1.1, toolchain 17
+        'modules/v1_21_1': [runner: jdk21, needsCommons: true],  // ModDevGradle on Gradle 8.14.3, toolchain 21
 ]
 
-task buildAndMoveJars {
-    doLast {
-        // Define the projects to be built and moved
+def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
 
-        // List to store the paths of the built JAR files
-        def jarFiles = []
+// Gradle 9 removed Project.exec{}; external processes must go through the injected ExecOperations service.
+abstract class ExecHelper {
+    @Inject abstract ExecOperations getExecOperations()
+}
+def execHelper = objects.newInstance(ExecHelper)
 
-        projectsWithJava.each { project, javaHome ->
-
-            // Execute the Gradle build for the project
-            println("[PROJECT_COMPAT] Building project: ${project} with JAVA_HOME=${javaHome}")
-
-            def gradlewBat = System.getProperty('os.name').toLowerCase().contains('windows')
-                    ? 'gradlew.bat'
-                    : 'gradlew'
-
-            def buildResult = exec {
-                // Use the Gradle Wrapper in the project directory
-                workingDir project
-                commandLine gradlewBat, 'build'
-                environment 'JAVA_HOME', javaHome
-                environment 'PATH', "${javaHome}/bin" + File.pathSeparator + System.getenv("PATH")
-                ignoreExitValue = true
-            }
-
-            // Check if the build was successful
-            if (buildResult.exitValue == 0) {
-                println("[PROJECT_COMPAT] Build Completed")
-
-                // Get the built JAR file
-                def projectName = project.substring(project.lastIndexOf('/') + 1)
-                def jarName = "${projectName}-COMPAT.jar"
-                def jarFile = file("$project/build/libs/${jarName}")
-
-                println("[PROJECT_COMPAT] Moving jar '${jarName}' to 'libs' directory")
-
-                def tempDir = file("libs")
-                tempDir.mkdirs()
-                def targetFile = file("$tempDir/${jarName}")
-                jarFile.renameTo(targetFile)
-
-                //Add to jarFiles list
-                jarFiles.add(targetFile)
-            } else {
-                // Print an error message if the build failed
-                println "Build failed for project: $project"
-            }
-        }
-
+def runModuleGradle = { String modPath, String runnerJdk, List<String> extraArgs ->
+    // Use the module wrapper's absolute path (cmd /c does not reliably resolve a bare 'gradlew.bat' by CWD).
+    def wrapper = new File(projectDir, "${modPath}/${isWindows ? 'gradlew.bat' : 'gradlew'}").absolutePath
+    def launcher = isWindows ? ['cmd', '/c', wrapper] : [wrapper]
+    execHelper.execOperations.exec {
+        workingDir new File(projectDir, modPath)
+        commandLine(launcher + extraArgs + ['--no-daemon'])
+        environment 'JAVA_HOME', runnerJdk
+        environment 'PATH', "${runnerJdk}\\bin" + File.pathSeparator + System.getenv('PATH')
+        ignoreExitValue = true
     }
 }
 
-clean{
+tasks.register('buildAndMoveJars') {
+    group = 'compat'
+    description = 'Builds every federated compat module on its own JDK and copies its *-COMPAT.jar into libs/.'
+    dependsOn ':modules:Commons:jar'
     doLast {
-        fileTree(dir: 'libs', include: '**/*-COMPAT.jar').each { file ->
-            file.delete()
-        }
+        file('libs').mkdirs()
+        def commonsJar = tasks.getByPath(':modules:Commons:jar').archiveFile.get().asFile
 
-        projectsWithJava.each { project, javaHome ->
-
-            // Execute the Gradle build for the project
-            println("[PROJECT_COMPAT] Clean project: ${project}")
-
-            def gradlewBat = System.getProperty('os.name').toLowerCase().contains('windows')
-                    ? 'gradlew.bat'
-                    : 'gradlew'
-
-            def cleanResult = exec {
-                // Use the Gradle Wrapper in the project directory
-                workingDir project
-                commandLine gradlewBat, 'clean'
-                environment 'JAVA_HOME', javaHome
-                environment 'PATH', "${javaHome}/bin" + File.pathSeparator + System.getenv("PATH")
-                ignoreExitValue = true
+        compatModules.each { modPath, cfg ->
+            // Provide Commons as a plain jar (federated modules can't consume it as a Gradle project across
+            // incompatible Gradle versions, so the root builds it once and drops it into their flatDir libs/).
+            if (cfg.needsCommons) {
+                def dst = file("${modPath}/libs/Commons.jar")
+                dst.parentFile.mkdirs()
+                java.nio.file.Files.copy(commonsJar.toPath(), dst.toPath(),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING)
             }
 
-            // Check if the build was successful
-            if (cleanResult.exitValue == 0) {
-                println("[PROJECT_COMPAT] Clean Completed")
-            } else {
-                // Print an error message if the build failed
-                println "Clean failed for project: $project"
+            println "[COMPAT] Building ${modPath} (JAVA_HOME=${cfg.runner})"
+            def result = runModuleGradle(modPath, cfg.runner, ['build'])
+            if (result.exitValue != 0) {
+                throw new GradleException("Compat build FAILED for ${modPath} (exit ${result.exitValue})")
             }
-        }
 
+            def name    = modPath.substring(modPath.lastIndexOf('/') + 1)
+            def jarName = "${name}-COMPAT.jar"
+            def built   = file("${modPath}/build/libs/${jarName}")
+            if (!built.exists()) {
+                throw new GradleException("Expected ${built} was not produced by ${modPath}")
+            }
+            def target = file("libs/${jarName}")
+            java.nio.file.Files.copy(built.toPath(), target.toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+            println "[COMPAT] -> libs/${jarName}"
+        }
     }
 }
 
+clean {
+    doLast {
+        fileTree(dir: 'libs', include: '**/*-COMPAT.jar').each { it.delete() }
+        compatModules.each { modPath, cfg ->
+            println "[COMPAT] Cleaning ${modPath}"
+            runModuleGradle(modPath, cfg.runner, ['clean'])
+            delete "${modPath}/libs/Commons.jar"
+        }
+    }
+}
+
+// Only the shaded jar is produced.
 shadowJar {
-    archiveName = "${baseName}-${version}.${extension}"
+    archiveClassifier.set('')
+    archiveFileName = "${project.name}-${version}.jar"
+    dependsOn tasks.named('buildAndMoveJars')
 }
 
-jar {
-    enabled = false //Disable default jar, only shadow jar will be created
-    dependsOn(buildAndMoveJars)
-    dependsOn(shadowJar { classifier = null })
+tasks.named('jar') {
+    enabled = false
+}
+tasks.named('build') {
+    dependsOn tasks.named('shadowJar')
 }
 
 publishing {
     repositories {
         maven {
-            name = "PetrusRepo"
-            url = "https://maven.petrus.dev/public"
+            name = 'PetrusRepo'
+            url = 'https://maven.petrus.dev/public'
             credentials {
                 username = System.env.PETRUSMAVEN_ACTOR
                 password = System.env.PETRUSMAVEN_TOKEN
@@ -176,12 +199,9 @@ publishing {
     }
     publications {
         petrus(MavenPublication) {
-            from(components.java)
+            artifact tasks.named('shadowJar') //Publish the fat jar; deps are shaded, so the POM stays dependency-free
             pom.withXml {
-                asNode().appendNode('url','https://petrus.dev')
-                asNode().dependencies.'*'.each() {
-                    it.parent().remove(it) //Remove all dependencies from pom file
-                }
+                asNode().appendNode('url', 'https://petrus.dev')
             }
         }
     }

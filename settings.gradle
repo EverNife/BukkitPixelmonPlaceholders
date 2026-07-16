@@ -1,3 +1,18 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        maven { url = 'https://maven.petrus.dev/public' }
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
 rootProject.name = 'BukkitPixelmonPlaceholders'
 
-include 'modules:Commons'
+// Only the plain-Java Commons is a real subproject of this Gradle 9 root.
+// The per-version compat modules keep their own wrappers/Forge toolchains and are federated
+// by the root's buildAndMoveJars task (they cannot run under Gradle 9).
+include ':modules:Commons'

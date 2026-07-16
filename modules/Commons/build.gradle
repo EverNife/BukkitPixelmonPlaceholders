@@ -1,22 +1,15 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-}
+import org.gradle.api.attributes.java.TargetJvmVersion
 
-apply plugin: 'java'
+plugins {
+    id 'java'
+}
 
 group 'br.com.finalcraft'
 version 'COMMONS'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-compileJava.options.encoding = 'UTF-8'
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+// Shared library: same Jabel-fork -> Java 8 recipe as the root plugin, no Forge/Minecraft classpath.
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
 
 repositories {
@@ -24,23 +17,48 @@ repositories {
         dirs 'libs'
     }
     mavenCentral()
-    jcenter()
     maven {
         name = 'spigotmc-repo'
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots'
     }
-    maven {
-        url = "https://maven.petrus.dev/public"
-    }
+    maven { url = 'https://maven.petrus.dev/public' }
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
-    compileOnly "br.com.finalcraft:EverNifeCore:2.0.4"
+    // Jabel fork: modern syntax -> Java 8 bytecode on a Java 25 javac.
+    annotationProcessor 'br.com.finalcraft:jabel:1.2.0'
+    compileOnly          'br.com.finalcraft:jabel:1.2.0'
 
-    //Annotations
+    compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
+    compileOnly 'br.com.finalcraft:EverNifeCore:2.0.4'
     compileOnly 'org.jetbrains:annotations:24.0.0'
 
-    //Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.24'
+    // Lombok (@Data is used in this module, so it must run as an annotation processor).
+    compileOnly        'org.projectlombok:lombok:1.18.46'
+    annotationProcessor 'org.projectlombok:lombok:1.18.46'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs.add('-parameters')
+}
+
+configure([tasks.compileJava]) {
+    sourceCompatibility = 25
+    options.release = 8
+    javaCompiler = javaToolchains.compilerFor {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+// Same Gradle-9 attribute/metadata handling as the root so the Commons artifact isn't tagged JVM-25-only.
+configurations.configureEach {
+    if (canBeResolved || canBeConsumed) {
+        attributes {
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
+        }
+    }
+}
+tasks.withType(GenerateModuleMetadata).configureEach {
+    enabled = false
 }
