@@ -27,8 +27,8 @@ running Pixelmon Reforged.
 - **Battle state detection** - whether a player is currently in any battle, PvP or PvE.
 - **Win/loss/KDR tracking** - battle stats surfaced as plain numbers.
 - **Party-level aggregates** - average, lowest, and highest level across all party members.
-- **Legendary spawn timer** - seconds, minutes, and a formatted countdown to the next legendary
-  spawn event.
+- **Legendary & Mega Boss spawn timers** - seconds, minutes, and a formatted countdown to the next
+  legendary spawn event, plus the same trio for the next Mega Boss spawn.
 - **Catch-combo tracking** - current combo count, species identifier, and localized species name.
 - **Per-slot Pokemon placeholders** via `%pixelmon_party_slot_N_<attr>%` (slots 1-6):
   - Identity: name, display name, species, Pokedex number, form, form (unlocalized).
@@ -162,6 +162,9 @@ All placeholders follow the pattern `%<prefix>_<id>%`. With the default prefix `
 | `%pixelmon_next_legendary%` | Seconds until next legendary spawn |
 | `%pixelmon_next_legendary_minutes%` | Minutes until next legendary spawn |
 | `%pixelmon_next_legendary_formatted%` | Formatted countdown (e.g. `2m 30s`) |
+| `%pixelmon_next_megaboss%` | Seconds until next Mega Boss spawn |
+| `%pixelmon_next_megaboss_minutes%` | Minutes until next Mega Boss spawn |
+| `%pixelmon_next_megaboss_formatted%` | Formatted countdown (e.g. `2m 30s`) |
 | `%pixelmon_catchcombo_amount%` | Current catch combo count |
 | `%pixelmon_catchcombo_species%` | Species internal name in catch combo |
 | `%pixelmon_catchcombo_species_localized%` | Localized species name in catch combo |
